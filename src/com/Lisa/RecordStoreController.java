@@ -10,6 +10,10 @@ public class RecordStoreController {
         RecordStoreGUI gui = new RecordStoreGUI();
     }
 
+    public static int requestInventoryCheck(String artist, String title, int status) {
+        return DataModel.checkInventoryForAlbum(artist, title, status);
+    }
+
     public static void requestAddAlbum(Album album) {
         DataModel.addAlbum(album);
     }

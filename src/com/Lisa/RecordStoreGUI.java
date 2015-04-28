@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import com.Lisa.Consignor;
 
 /**
  * Created by lisa on 4/26/15.
@@ -14,7 +13,6 @@ import com.Lisa.Consignor;
 public class RecordStoreGUI extends JFrame {
     private JButton buyAlbumButton;
     private JButton checkInventoryButton;
-    private JTextField inventoryCheckTextField;
     private JTextField artistTextField;
     private JTextField titleTextField;
     private JComboBox consignorCombobox;
@@ -24,6 +22,8 @@ public class RecordStoreGUI extends JFrame {
     private JPanel buyPanel;
     private JTabbedPane guiTabbedPane;
     private JButton quitButton;
+    private JTextArea inventoryTextArea;
+    private JButton declineButton;
 
     RecordStoreGUI() {
         setContentPane(guiTabbedPane);
@@ -72,6 +72,41 @@ public class RecordStoreGUI extends JFrame {
         for (Consignor consignor : consignorList) {
             model.addElement(consignor);
         }
+        consignorCombobox.setSelectedItem(null);
+
+        checkInventoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = artistTextField.getText();
+                String title = titleTextField.getText();
+
+                StringBuilder stringBuilder = new StringBuilder();
+                int numStoreCopies = RecordStoreController.requestInventoryCheck(name, title, Album.STORE);
+                String inventorySearchResultString = "Copies in store: " + numStoreCopies + "\n";
+                stringBuilder.append(inventorySearchResultString);
+
+                int numBargainCopies = RecordStoreController.requestInventoryCheck(name, title, Album.BARGAIN_BIN);
+                String bargainSearchResultString = "Copies in bargain bin: " + numBargainCopies + "\n";
+                stringBuilder.append(bargainSearchResultString);
+
+                int numSoldCopies = RecordStoreController.requestInventoryCheck(name, title, Album.SOLD);
+                String soldCopiesSearchResultString = "Copies sold in past 30 days: " + numSoldCopies + "\n";
+                stringBuilder.append(soldCopiesSearchResultString);
+
+                int numDonatedCopies = RecordStoreController.requestInventoryCheck(name, title, Album.DONATED);
+                String donatedCopiesSearchResultString = "Copies donated in past 90 days: " + numDonatedCopies + "\n";
+                stringBuilder.append(donatedCopiesSearchResultString);
+
+                inventoryTextArea.setText(stringBuilder.toString());
+            }
+        });
+
+        declineButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetFields();
+            }
+        });
 
         buyAlbumButton.addActionListener(new ActionListener() {
             @Override
@@ -138,7 +173,6 @@ public class RecordStoreGUI extends JFrame {
                 System.exit(0);
             }
         });
-
     }
 
     private void resetFields() {
@@ -148,5 +182,6 @@ public class RecordStoreGUI extends JFrame {
         sizeCombobox.setSelectedItem(null);
         conditionCombobox.setSelectedItem(null);
         priceTextField.setText("");
+        inventoryTextArea.setText("");
     }
 }

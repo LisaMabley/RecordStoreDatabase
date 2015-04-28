@@ -140,15 +140,6 @@
             </constraints>
             <properties/>
           </component>
-          <component id="d0857" class="javax.swing.JButton" binding="buyAlbumButton" default-binding="true">
-            <constraints>
-              <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Buy Album"/>
-            </properties>
-          </component>
           <component id="69f8d" class="javax.swing.JButton" binding="checkInventoryButton" default-binding="true">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -164,17 +155,33 @@
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
           </hspacer>
-          <component id="b7f4d" class="javax.swing.JTextField" binding="inventoryCheckTextField">
+          <component id="a593a" class="javax.swing.JTextArea" binding="inventoryTextArea">
             <constraints>
-              <grid row="1" column="3" row-span="4" col-span="1" vsize-policy="0" hsize-policy="6" anchor="9" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="-1"/>
+              <grid row="1" column="3" row-span="4" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
               </grid>
               <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
               <background color="-1118482"/>
-              <editable value="false"/>
-              <text value=""/>
+            </properties>
+          </component>
+          <component id="d0857" class="javax.swing.JButton" binding="buyAlbumButton" default-binding="true">
+            <constraints>
+              <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Buy Album"/>
+            </properties>
+          </component>
+          <component id="22383" class="javax.swing.JButton" binding="declineButton" default-binding="true">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Decline"/>
             </properties>
           </component>
         </children>

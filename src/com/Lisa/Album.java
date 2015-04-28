@@ -1,5 +1,5 @@
 package com.Lisa;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by lisa on 4/21/15.
@@ -14,10 +14,10 @@ public class Album {
     protected int size;
     protected int condition;
     protected float price;
-    protected Date dateConsigned;
+    protected java.sql.Date dateConsigned;
     protected int status;
-    protected Date dateSold;
-    protected Date dateOwnerNotifiedAlbumUnsold;
+    protected java.sql.Date dateSold;
+    protected java.sql.Date dateOwnerNotifiedAlbumUnsold;
 
     // Size constants
     protected static final int SEVEN_INCH = 1;
@@ -48,7 +48,8 @@ public class Album {
         this.size = size;
         this.condition = condition;
         this.price = price;
-        this.dateConsigned = new Date();
+        java.util.Date utilDate = new java.util.Date();
+        this.dateConsigned = new java.sql.Date(utilDate.getTime());
         this.status = STORE;
     }
 

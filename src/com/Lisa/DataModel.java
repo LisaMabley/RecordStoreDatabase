@@ -232,8 +232,53 @@ public class DataModel {
         return consignorList;
     }
 
+    public static int checkInventoryForAlbum(String artist, String title, int status) {
+        // Check number of copies in store
+
+        int copiesInStore = 0;
+
+        try {
+            String invCountSql = "SELECT COUNT(*) AS numCopies FROM albums WHERE artist = ? AND title = ? AND status = ?";
+
+            PreparedStatement psCheckInventory = connection.prepareStatement(invCountSql);
+            allStatements.add(psCheckInventory);
+            psCheckInventory.setString(1, artist);
+            psCheckInventory.setString(2, title);
+            psCheckInventory.setInt(3, status);
+            resultSet = psCheckInventory.executeQuery();
+            resultSet.next();
+            copiesInStore = resultSet.getInt("numCopies");
+
+        } catch (SQLException sqle) {
+            System.out.println("Failed to count number of copies.");
+            System.out.println(sqle);
+        }
+
+        return copiesInStore;
+    }
+
     public static void addAlbum(Album album) {
-        System.out.println("Ready to add " + album);
+
+        try {
+            String psInsertSql = "INSERT INTO albums (consignerId, artist, title, size, condition, price, date_consigned, status) " +
+                    "VALUES ( ?, ?, ? , ?, ?, ?, ?, ? )";
+            PreparedStatement psAlbum = connection.prepareStatement(psInsertSql);
+            allStatements.add(psAlbum);
+            psAlbum.setInt(1, album.consignorId);
+            psAlbum.setString(2, album.artist);
+            psAlbum.setString(3, album.title);
+            psAlbum.setInt(4, album.size);
+            psAlbum.setInt(5, album.condition);
+            psAlbum.setFloat(6, album.price);
+            psAlbum.setDate(7, album.dateConsigned);
+            psAlbum.setInt(8, album.status);
+            psAlbum.executeUpdate();
+            System.out.println("Added album: " + album);
+
+        } catch (SQLException sqlException) {
+            System.out.println("Could not add album.");
+            System.out.println(sqlException);
+        }
     }
 
     public static void closeDbConnections() {
