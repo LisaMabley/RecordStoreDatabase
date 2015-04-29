@@ -1,9 +1,10 @@
 package com.Lisa;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
@@ -27,12 +28,13 @@ public class RecordStoreGUI extends JFrame {
     private JButton searchButton;
     private JButton sellAlbumButton;
     private JButton cancelButton;
-    private JList albumSearchResultsJList;
+    private JList<Album> albumSearchResultsJList;
     private JComboBox searchByCombobox;
     private JTextField searchTextField;
     private JTextArea searchResultTextArea;
 
-    DefaultListModel<Album> searchResultsListModel;
+    DefaultListModel<Album> searchResultsListModel = new DefaultListModel<Album>();
+    DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
 
     public static final int ARTIST_FIELD = 1;
     public static final int TITLE_FIELD = 2;
@@ -42,7 +44,7 @@ public class RecordStoreGUI extends JFrame {
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        setSize(new Dimension(600, 600));
+        setSize(new Dimension(550, 550));
 
         // SELL/REMOVE ALBUM PANEL
         // Set options for search by comboBox
@@ -62,14 +64,51 @@ public class RecordStoreGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int fieldToSearch = (searchByCombobox.getSelectedItem().equals(art)) ? ARTIST_FIELD : TITLE_FIELD;
                 ArrayList<Album> searchResult = RecordStoreController.requestSearchInventory(searchTextField.getText(), fieldToSearch);
-                for (Album album : searchResult) {
-                    System.out.println(album.title);
-                    RecordStoreGUI.this.searchResultsListModel.addElement(album);
+
+                if (searchResult.isEmpty()) {
+                    searchResultTextArea.setText("No matching albums in inventory.");
+
+                } else {
+                    for (Album album : searchResult) {
+                        RecordStoreGUI.this.searchResultsListModel.addElement(album);
+                    }
                 }
             }
         });
 
+        albumSearchResultsJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                Album selectedAlbum = albumSearchResultsJList.getSelectedValue();
+                searchResultTextArea.setText(selectedAlbum.getDetailString());
+            }
+        });
+
+        searchTextField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+                resetSearchFields();
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetSearchFields();
+            }
+        });
+
+        sellAlbumButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Album selectedAlbum = albumSearchResultsJList.getSelectedValue();
+                RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.SOLD);
+            }
+        });
+
         // BUY/ADD ALBUM PANEL
+        // TODO move each panel into its own class & file
         // Set options for size comboBox
         final String seven = "7 Inch";
         final String ten = "10 Inch";
@@ -103,11 +142,11 @@ public class RecordStoreGUI extends JFrame {
         conditionCombobox.setSelectedItem(null);
 
         // Populate consignor comboBox
-        ArrayList<Consignor> consignorList = DataModel.getConsignors();
-        DefaultComboBoxModel model = (DefaultComboBoxModel)consignorCombobox.getModel();
-        model.removeAllElements();
-        for (Consignor consignor : consignorList) {
-            model.addElement(consignor);
+        consignorCombobox.setModel(consignorComboBoxModel);
+        ArrayList<Consignor> consignorArrayList = DataModel.getConsignors();
+
+        for (Consignor consignor : consignorArrayList) {
+            consignorComboBoxModel.addElement(consignor);
         }
         consignorCombobox.setSelectedItem(null);
 
@@ -154,8 +193,8 @@ public class RecordStoreGUI extends JFrame {
                 String name = artistTextField.getText();
                 String title = titleTextField.getText();
 
-                Object consignor = consignorCombobox.getSelectedItem();
-                System.out.println(consignor.getClass());
+                // TODO Why doesn't this recognize the consignor as a Consignor object?
+//                Consignor consignor = consignorComboBoxModel.getSelectedItem();
 //                int consignorId = consignor.getId();
                 int consignorId = 3;
 
@@ -221,5 +260,15 @@ public class RecordStoreGUI extends JFrame {
         conditionCombobox.setSelectedItem(null);
         priceTextField.setText("");
         inventoryTextArea.setText("");
+    }
+
+    private void resetSearchFields() {
+        searchTextField.setText("");
+        searchResultTextArea.setText("");
+
+        if (!searchResultsListModel.isEmpty() && searchResultsListModel != null) {
+            // TODO Test and fix bugs that cause crashes here
+            searchResultsListModel.removeAllElements();
+        }
     }
 }

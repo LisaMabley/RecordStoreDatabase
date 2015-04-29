@@ -28,9 +28,9 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-//        createTableSQL();
-//        createTestConsignorDataSQL();
-//        createTestAlbumDataSQL();
+        createTableSQL();
+        createTestConsignorDataSQL();
+        createTestAlbumDataSQL();
     }
 
     protected void createTableSQL() {
@@ -72,6 +72,17 @@ public class DataModel {
         }
     }
 
+    protected static void executeSqlUpdate(PreparedStatement ps, String sqlAction) {
+        try {
+            ps.executeUpdate();
+            System.out.println(sqlAction + " succeeded.");
+
+        } catch (SQLException sqlException) {
+            System.out.println(sqlAction + " failed. Could not execute SQL statement.");
+            System.out.println(sqlException);
+        }
+    }
+
     protected static ResultSet executeSqlQuery(String sql, String sqlAction) {
 
         try {
@@ -87,6 +98,7 @@ public class DataModel {
     }
 
     private static void createTestConsignorDataSQL() {
+        // TODO remove when final
 
         String sqlAction = "Insert consigner";
 
@@ -111,6 +123,7 @@ public class DataModel {
     }
 
     private static void createTestAlbumDataSQL() {
+        // TODO remove when final
 
         try {
             FileReader reader = new FileReader("Albums.txt");
@@ -127,8 +140,8 @@ public class DataModel {
                 try {
                     line = buffReader.readLine();
                     splitLine = line.split("%");
-                    artist = "'" + splitLine[0] + "'";
-                    title = "'" + splitLine[1]+ "'";
+                    artist = splitLine[0];
+                    title = splitLine[1];
 
                 } catch (IOException ioe) {
                     System.out.println("Could not open or read Albums.txt");
@@ -188,6 +201,7 @@ public class DataModel {
     }
 
     protected static void executeAddAlbumSql(String artist, String title, int size, int condition, java.sql.Date date_consigned, int status) {
+        // TODO remove when final
 
         try {
             String psInsertSql = "INSERT INTO albums (artist, title, size, condition, date_consigned, status) " +
@@ -200,8 +214,7 @@ public class DataModel {
             psAlbum.setInt(4, condition);
             psAlbum.setDate(5, date_consigned);
             psAlbum.setInt(6, status);
-            psAlbum.executeUpdate();
-            System.out.println("Added album " + title);
+            executeSqlUpdate(psAlbum, "Add album");
 
         } catch (SQLException sqlException) {
             System.out.println("Could not add album.");
@@ -234,6 +247,7 @@ public class DataModel {
 
     public static int getNumCopiesInInventory(String artist, String title, int status) {
         // Returns number of copies in store
+        // TODO restrict SOLD and DONATED status to past 60 days
 
         int copiesInStore = 0;
 
@@ -258,7 +272,7 @@ public class DataModel {
     }
 
     public static ArrayList<Album> searchInventoryForAlbums(String searchString, int fieldToSearch) {
-        // Return ResultSet of albums in Store or Bargain Bin with matching title or artist
+        // Return ResultSet of albums with matching title or artist
 
         String searchSql = "";
         ArrayList<Album> searchResults = new ArrayList<Album>();
@@ -281,7 +295,6 @@ public class DataModel {
 
             while (resultSet.next()) {
                 int albumId = resultSet.getInt("albumId");
-                System.out.println("Album id: " + albumId);
                 int consignor = resultSet.getInt("consignorId");
                 String artist = resultSet.getString("artist");
                 String title = resultSet.getString("title");
@@ -323,6 +336,42 @@ public class DataModel {
 
         } catch (SQLException sqlException) {
             System.out.println("Could not add album.");
+            System.out.println(sqlException);
+        }
+    }
+
+    public static void updateAlbumStatus(Album albumToUpdate, int newStatus) {
+
+        int albumId = albumToUpdate.albumId;
+
+        try {
+            java.sql.Date saleDate = albumToUpdate.dateSold;
+            String updateStatusSql = "";
+
+            if (newStatus == Album.SOLD) {
+                updateStatusSql = "UPDATE albums SET status = ?, date_sold = ? WHERE albumId = ?";
+
+            } else {
+                updateStatusSql = "UPDATE albums SET status = ? WHERE albumId = ?";
+            }
+
+            PreparedStatement psUdateAlbumStatus = connection.prepareStatement(updateStatusSql);
+            allStatements.add(psUdateAlbumStatus);
+
+            if (newStatus == Album.SOLD) {
+                psUdateAlbumStatus.setInt(1, newStatus);
+                psUdateAlbumStatus.setDate(2, saleDate);
+                psUdateAlbumStatus.setInt(3, albumId);
+
+            } else {
+                psUdateAlbumStatus.setInt(1, newStatus);
+                psUdateAlbumStatus.setInt(2, albumId);
+            }
+
+            executeSqlUpdate(psUdateAlbumStatus, "Update album status");
+
+        } catch (SQLException sqlException) {
+            System.out.println("Could not update album status.");
             System.out.println(sqlException);
         }
     }

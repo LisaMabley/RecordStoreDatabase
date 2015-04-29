@@ -24,4 +24,11 @@ public class RecordStoreController {
         ArrayList<Album> results = DataModel.searchInventoryForAlbums(searchString, searchField);
         return results;
     }
+
+    public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {
+        if (newStatus == Album.SOLD) {
+            albumToUpdate.setSoldDate();
+        }
+        DataModel.updateAlbumStatus(albumToUpdate, newStatus);
+    }
 }

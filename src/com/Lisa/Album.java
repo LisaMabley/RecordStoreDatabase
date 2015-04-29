@@ -66,6 +66,11 @@ public class Album {
         this.status = status;
     }
 
+    public void setSoldDate() {
+        java.util.Date utilDate = new java.util.Date();
+        this.dateSold = new java.sql.Date(utilDate.getTime());
+    }
+
     public String getDetailString() {
         StringBuilder stringBuilder = new StringBuilder();
         String titleDetail = "Title: " + this.title + "\n";
@@ -86,9 +91,7 @@ public class Album {
         String statusDetail = "Location: " + this.getStatusString() + "\n";
         stringBuilder.append(statusDetail);
 
-        String detailString = stringBuilder.toString();
-
-        return detailString;
+        return stringBuilder.toString();
     }
 
     @Override
