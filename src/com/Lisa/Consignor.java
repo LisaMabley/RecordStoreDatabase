@@ -16,8 +16,8 @@ public class Consignor {
         this.consignorId = id;
     }
 
-    public int getConsignorId() {
-        return consignorId;
+    public int getId() {
+        return this.consignorId;
     }
 
     @Override

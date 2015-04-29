@@ -36,7 +36,7 @@ public class DataModel {
     protected void createTableSQL() {
 
         String createAlbumsTableSQL = "CREATE TABLE albums (albumId INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
-                "consignerId INT, artist VARCHAR(45), title VARCHAR(45), size INT, condition INT, price FLOAT, date_consigned DATE, status INT, date_sold DATE, date_notified DATE)";
+                "consignorId INT, artist VARCHAR(45), title VARCHAR(45), size INT, condition INT, price FLOAT, date_consigned DATE, status INT, date_sold DATE, date_notified DATE)";
         String createAlbumTableAction = "Create album table";
         executeSqlUpdate(createAlbumsTableSQL, createAlbumTableAction);
 
@@ -232,8 +232,8 @@ public class DataModel {
         return consignorList;
     }
 
-    public static int checkInventoryForAlbum(String artist, String title, int status) {
-        // Check number of copies in store
+    public static int getNumCopiesInInventory(String artist, String title, int status) {
+        // Returns number of copies in store
 
         int copiesInStore = 0;
 
@@ -257,10 +257,56 @@ public class DataModel {
         return copiesInStore;
     }
 
+    public static ArrayList<Album> searchInventoryForAlbums(String searchString, int fieldToSearch) {
+        // Return ResultSet of albums in Store or Bargain Bin with matching title or artist
+
+        String searchSql = "";
+        ArrayList<Album> searchResults = new ArrayList<Album>();
+
+        if (fieldToSearch == RecordStoreGUI.ARTIST_FIELD) {
+            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND artist = ?";
+
+        } else if (fieldToSearch == RecordStoreGUI.TITLE_FIELD) {
+            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND title = ?";
+
+        } else {
+            return null;
+        }
+
+        try {
+            PreparedStatement psSearch = connection.prepareStatement(searchSql);
+            allStatements.add(psSearch);
+            psSearch.setString(1, searchString);
+            resultSet = psSearch.executeQuery();
+
+            while (resultSet.next()) {
+                int albumId = resultSet.getInt("albumId");
+                System.out.println("Album id: " + albumId);
+                int consignor = resultSet.getInt("consignorId");
+                String artist = resultSet.getString("artist");
+                String title = resultSet.getString("title");
+                int size = resultSet.getInt("size");
+                int condition = resultSet.getInt("condition");
+                float price = resultSet.getFloat("price");
+                int status = resultSet.getInt("status");
+                // TODO probably need other fields here
+
+                Album newAlbum = new Album(albumId, consignor, artist, title, size, condition, price, status);
+                searchResults.add(newAlbum);
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not execute search.");
+            System.out.println(sqle);
+        }
+
+        return searchResults;
+    }
+
     public static void addAlbum(Album album) {
 
         try {
-            String psInsertSql = "INSERT INTO albums (consignerId, artist, title, size, condition, price, date_consigned, status) " +
+            String psInsertSql = "INSERT INTO albums (consignorId, artist, title, size, condition, price, date_consigned, status) " +
                     "VALUES ( ?, ?, ? , ?, ?, ?, ?, ? )";
             PreparedStatement psAlbum = connection.prepareStatement(psInsertSql);
             allStatements.add(psAlbum);

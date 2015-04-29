@@ -24,15 +24,52 @@ public class RecordStoreGUI extends JFrame {
     private JButton quitButton;
     private JTextArea inventoryTextArea;
     private JButton declineButton;
+    private JButton searchButton;
+    private JButton sellAlbumButton;
+    private JButton cancelButton;
+    private JList albumSearchResultsJList;
+    private JComboBox searchByCombobox;
+    private JTextField searchTextField;
+    private JTextArea searchResultTextArea;
+
+    DefaultListModel<Album> searchResultsListModel;
+
+    public static final int ARTIST_FIELD = 1;
+    public static final int TITLE_FIELD = 2;
 
     RecordStoreGUI() {
         setContentPane(guiTabbedPane);
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        setSize(new Dimension(500, 450));
+        setSize(new Dimension(600, 600));
 
-        // BUY/ADD RECORD PANEL
+        // SELL/REMOVE ALBUM PANEL
+        // Set options for search by comboBox
+        final String art = "Artist Name";
+        final String tit = "Album Title";
+        searchByCombobox.addItem(art);
+        searchByCombobox.addItem(tit);
+        searchByCombobox.setSelectedItem(tit);
+
+        // Create list models for search
+        searchResultsListModel = new DefaultListModel<Album>();
+        albumSearchResultsJList.setModel(searchResultsListModel);
+        albumSearchResultsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int fieldToSearch = (searchByCombobox.getSelectedItem().equals(art)) ? ARTIST_FIELD : TITLE_FIELD;
+                ArrayList<Album> searchResult = RecordStoreController.requestSearchInventory(searchTextField.getText(), fieldToSearch);
+                for (Album album : searchResult) {
+                    System.out.println(album.title);
+                    RecordStoreGUI.this.searchResultsListModel.addElement(album);
+                }
+            }
+        });
+
+        // BUY/ADD ALBUM PANEL
         // Set options for size comboBox
         final String seven = "7 Inch";
         final String ten = "10 Inch";
@@ -77,6 +114,7 @@ public class RecordStoreGUI extends JFrame {
         checkInventoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO: What if one of these fields is blank?
                 String name = artistTextField.getText();
                 String title = titleTextField.getText();
 
@@ -90,11 +128,11 @@ public class RecordStoreGUI extends JFrame {
                 stringBuilder.append(bargainSearchResultString);
 
                 int numSoldCopies = RecordStoreController.requestInventoryCheck(name, title, Album.SOLD);
-                String soldCopiesSearchResultString = "Copies sold in past 30 days: " + numSoldCopies + "\n";
+                String soldCopiesSearchResultString = "Copies sold in past 60 days: " + numSoldCopies + "\n";
                 stringBuilder.append(soldCopiesSearchResultString);
 
                 int numDonatedCopies = RecordStoreController.requestInventoryCheck(name, title, Album.DONATED);
-                String donatedCopiesSearchResultString = "Copies donated in past 90 days: " + numDonatedCopies + "\n";
+                String donatedCopiesSearchResultString = "Copies donated in past 60 days: " + numDonatedCopies + "\n";
                 stringBuilder.append(donatedCopiesSearchResultString);
 
                 inventoryTextArea.setText(stringBuilder.toString());
@@ -112,12 +150,13 @@ public class RecordStoreGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // TODO: Input validation
+                // TODO: Input validation. Any prohibited characters?
                 String name = artistTextField.getText();
                 String title = titleTextField.getText();
 
-                // Object consignor = consignorCombobox.getSelectedItem();
-                // int consignorId = getConsignorId(consignor);
+                Object consignor = consignorCombobox.getSelectedItem();
+                System.out.println(consignor.getClass());
+//                int consignorId = consignor.getId();
                 int consignorId = 3;
 
                 int size;
@@ -139,7 +178,6 @@ public class RecordStoreGUI extends JFrame {
                 }
 
                 int condition;
-                String conditionString = conditionCombobox.getSelectedItem().toString();
                 if (sizeString.equalsIgnoreCase(poor)) {
                     condition = Album.POOR;
                 } else if (sizeString.equalsIgnoreCase(fair)) {
@@ -159,7 +197,8 @@ public class RecordStoreGUI extends JFrame {
                 // TODO: Input validation
                 float price = Float.parseFloat(priceTextField.getText());
 
-                Album newAlbum = new Album(name, title, consignorId, size, condition, price);
+                // TODO: Null values allowed? Or are all fields required?
+                Album newAlbum = new Album(consignorId, name, title, size, condition, price);
                 RecordStoreController.requestAddAlbum(newAlbum);
                 resetFields();
             }
@@ -168,7 +207,6 @@ public class RecordStoreGUI extends JFrame {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Quit button pressed.");
                 DataModel.closeDbConnections();
                 System.exit(0);
             }

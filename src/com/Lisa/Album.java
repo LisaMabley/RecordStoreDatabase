@@ -41,10 +41,10 @@ public class Album {
     protected static final int SOLD = 3;
     protected static final int DONATED = 4;
 
-    Album(String artistName, String albumTitle, int consignorId, int size, int condition, float price) {
+    Album(int consignorId, String artistName, String albumTitle, int size, int condition, float price) {
+        this.consignorId = consignorId;
         this.artist = artistName;
         this.title = albumTitle;
-        this.consignorId = consignorId;
         this.size = size;
         this.condition = condition;
         this.price = price;
@@ -53,9 +53,117 @@ public class Album {
         this.status = STORE;
     }
 
+    Album(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, int status) {
+        this.albumId = id;
+        this.consignorId = consignor;
+        this.artist = artistName;
+        this.title = albumTitle;
+        this.size = size;
+        this.condition = condition;
+        this.price = price;
+        java.util.Date utilDate = new java.util.Date();
+        this.dateConsigned = new java.sql.Date(utilDate.getTime());
+        this.status = status;
+    }
+
+    public String getDetailString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String titleDetail = "Title: " + this.title + "\n";
+        stringBuilder.append(titleDetail);
+
+        String artistDetail = "Artist: " + this.artist + "\n";
+        stringBuilder.append(artistDetail);
+
+        String sizeDetail = "Size: " + this.getSizeString() + "\n";
+        stringBuilder.append(sizeDetail);
+
+        String conditionDetail = "Condition: " + this.getConditionString() + "\n";
+        stringBuilder.append(conditionDetail);
+
+        String priceDetail = "Price: $" + this.price + "\n";
+        stringBuilder.append(priceDetail);
+
+        String statusDetail = "Location: " + this.getStatusString() + "\n";
+        stringBuilder.append(statusDetail);
+
+        String detailString = stringBuilder.toString();
+
+        return detailString;
+    }
+
     @Override
     public String toString() {
         return this.title + " by " + this.artist;
     }
 
+    // String getters for constants
+
+    protected String getSizeString() {
+        switch (this.size) {
+            case SEVEN_INCH:
+                return "Seven Inch";
+
+            case TEN_INCH:
+                return "Ten Inch";
+
+            case TWELVE_INCH:
+                return "Twelve Inch";
+
+            case LP:
+                return "LP";
+
+            case TWO_LP_SET:
+                return "Two LP Set";
+
+            case BOX_SET:
+                return "Boxed Set";
+
+            default:
+                return "";
+        }
+    }
+
+    protected String getConditionString() {
+        switch (this.condition) {
+            case POOR:
+                return "Poor";
+
+            case FAIR:
+                return "Fair";
+
+            case GOOD:
+                return "Good";
+
+            case VERY_GOOD:
+                return "Very Good";
+
+            case NEAR_MINT:
+                return "Near Mint";
+
+            case MINT:
+                return "Mint";
+
+            default:
+                return "";
+        }
+    }
+
+    protected String getStatusString() {
+        switch (this.status) {
+            case STORE:
+                return "Store";
+
+            case BARGAIN_BIN:
+                return "Bargain Bin";
+
+            case SOLD:
+                return "Sold";
+
+            case DONATED:
+                return "Donated";
+
+            default:
+                return "";
+        }
+    }
 }
