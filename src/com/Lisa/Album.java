@@ -1,5 +1,4 @@
 package com.Lisa;
-import java.sql.Date;
 
 /**
  * Created by lisa on 4/21/15.
@@ -17,7 +16,6 @@ public class Album {
     protected java.sql.Date dateConsigned;
     protected int status;
     protected java.sql.Date dateSold;
-    protected java.sql.Date dateOwnerNotifiedAlbumUnsold;
 
     // Size constants
     protected static final int SEVEN_INCH = 1;
@@ -40,6 +38,7 @@ public class Album {
     protected static final int BARGAIN_BIN = 2;
     protected static final int SOLD = 3;
     protected static final int DONATED = 4;
+    protected static final int RETURNED_TO_CONSIGNOR = 5;
 
     Album(int consignorId, String artistName, String albumTitle, int size, int condition, float price) {
         this.consignorId = consignorId;
@@ -54,6 +53,7 @@ public class Album {
     }
 
     Album(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, int status) {
+        // TODO add all possible fields here, use null values if needed
         this.albumId = id;
         this.consignorId = consignor;
         this.artist = artistName;
@@ -64,11 +64,23 @@ public class Album {
         java.util.Date utilDate = new java.util.Date();
         this.dateConsigned = new java.sql.Date(utilDate.getTime());
         this.status = status;
+
+        // TODO why is price always $0?
     }
 
     public void setSoldDate() {
         java.util.Date utilDate = new java.util.Date();
         this.dateSold = new java.sql.Date(utilDate.getTime());
+    }
+
+    public void moveToBargainBin() {
+        this.status = BARGAIN_BIN;
+        this.price = 1;
+    }
+
+    public void setDonated() {
+        this.status = DONATED;
+        this.price = 0;
     }
 
     public String getDetailString() {

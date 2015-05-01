@@ -1,6 +1,8 @@
 package com.Lisa;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RecordStoreController {
 
@@ -30,5 +32,24 @@ public class RecordStoreController {
             albumToUpdate.setSoldDate();
         }
         DataModel.updateAlbumStatus(albumToUpdate, newStatus);
+    }
+
+    public static ArrayList<Album> requestAlbumsOfAge(int seekingAlbumsTo) {
+
+        int findAlbumsOfStatus = 0;
+        // First read about Calendar class at URL below
+        // http://stackoverflow.com/questions/6439946/java-date-problems-finding-the-date-x-days-ago
+        Calendar calendar = Calendar.getInstance();
+        if (seekingAlbumsTo == RecordStoreGUI.MOVE_TO_BARGAINBIN) {
+            calendar.add(Calendar.DAY_OF_MONTH, -37);
+            findAlbumsOfStatus = Album.STORE;
+        } else if (seekingAlbumsTo == RecordStoreGUI.DONATE) {
+            calendar.add(Calendar.YEAR, -1);
+            findAlbumsOfStatus = Album.BARGAIN_BIN;
+        }
+        Date utilDate = calendar.getTime();
+        java.sql.Date findAlbumsConsignedBefore = new java.sql.Date(utilDate.getTime());
+
+        return DataModel.findAlbumsOfAge(findAlbumsConsignedBefore, findAlbumsOfStatus);
     }
 }

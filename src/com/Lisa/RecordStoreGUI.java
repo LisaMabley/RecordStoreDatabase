@@ -32,12 +32,32 @@ public class RecordStoreGUI extends JFrame {
     private JComboBox searchByCombobox;
     private JTextField searchTextField;
     private JTextArea searchResultTextArea;
+    private JButton findAlbumsOver37Button;
+    private JButton findAlbumsOver13Button;
+    private JButton markSelectedButton;
+    private JButton markAllButton;
+    private JScrollPane inventoryScrollpane;
+    private JList inventoryJList;
+    private JPanel sellPanel;
+    private JPanel inventoryPanel;
+    private JTextArea albumAgingTextArea;
 
     DefaultListModel<Album> searchResultsListModel = new DefaultListModel<Album>();
     DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
+    DefaultListModel<Album> inventoryListModel = new DefaultListModel<Album>();
+    ArrayList<Album> albumAgingArrayList = new ArrayList<Album>();
 
+
+    // Indicates whether searching artist or title
+    // in Sell Album panel
     public static final int ARTIST_FIELD = 1;
     public static final int TITLE_FIELD = 2;
+
+    // Indicates which album aging period is
+    // being requested in Manage Inventory panel
+    public static final int MOVE_TO_BARGAINBIN = 1;
+    public static final int DONATE = 2;
+
 
     RecordStoreGUI() {
         setContentPane(guiTabbedPane);
@@ -55,13 +75,13 @@ public class RecordStoreGUI extends JFrame {
         searchByCombobox.setSelectedItem(tit);
 
         // Create list models for search
-        searchResultsListModel = new DefaultListModel<Album>();
         albumSearchResultsJList.setModel(searchResultsListModel);
         albumSearchResultsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                RecordStoreGUI.this.searchResultsListModel.removeAllElements();
                 int fieldToSearch = (searchByCombobox.getSelectedItem().equals(art)) ? ARTIST_FIELD : TITLE_FIELD;
                 ArrayList<Album> searchResult = RecordStoreController.requestSearchInventory(searchTextField.getText(), fieldToSearch);
 
@@ -193,10 +213,8 @@ public class RecordStoreGUI extends JFrame {
                 String name = artistTextField.getText();
                 String title = titleTextField.getText();
 
-                // TODO Why doesn't this recognize the consignor as a Consignor object?
-//                Consignor consignor = consignorComboBoxModel.getSelectedItem();
-//                int consignorId = consignor.getId();
-                int consignorId = 3;
+                Consignor consignor = (Consignor) consignorComboBoxModel.getSelectedItem();
+                int consignorId = consignor.getId();
 
                 int size;
                 String sizeString = sizeCombobox.getSelectedItem().toString();
@@ -248,6 +266,83 @@ public class RecordStoreGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 DataModel.closeDbConnections();
                 System.exit(0);
+            }
+        });
+
+        // INVENTORY PANEL
+        // Create list models for inventory search
+        inventoryJList.setModel(inventoryListModel);
+        inventoryJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        findAlbumsOver37Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RecordStoreGUI.this.inventoryListModel.removeAllElements();
+                albumAgingArrayList.clear();
+                albumAgingArrayList = RecordStoreController.requestAlbumsOfAge(MOVE_TO_BARGAINBIN);
+
+                if (albumAgingArrayList.isEmpty()) {
+                    albumAgingTextArea.setText("No albums found.");
+
+                } else {
+                    albumAgingTextArea.setText("Which albums would you like to move to the bargain bin?");
+                    for (Album album : albumAgingArrayList) {
+                        RecordStoreGUI.this.inventoryListModel.addElement(album);
+                    }
+                }
+            }
+        });
+
+        findAlbumsOver13Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RecordStoreGUI.this.inventoryListModel.removeAllElements();
+                albumAgingArrayList.clear();
+                albumAgingArrayList = RecordStoreController.requestAlbumsOfAge(DONATE);
+
+                if (albumAgingArrayList.isEmpty()) {
+                    albumAgingTextArea.setText("No albums found.");
+
+                } else {
+                    albumAgingTextArea.setText("Which albums would you like to donate?");
+                    for (Album album : albumAgingArrayList) {
+                        RecordStoreGUI.this.inventoryListModel.addElement(album);
+                    }
+                }
+            }
+        });
+
+        markSelectedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Album selectedAlbum = (Album) inventoryJList.getSelectedValue();
+                inventoryListModel.removeElement(selectedAlbum);
+
+                if (selectedAlbum.status == Album.STORE) {
+                    selectedAlbum.moveToBargainBin();
+
+                } else if (selectedAlbum.status == Album.BARGAIN_BIN) {
+                    selectedAlbum.setDonated();
+                }
+            }
+        });
+
+        markAllButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (albumAgingTextArea.getText().contains("bargain bin")) {
+                    for (Album album : albumAgingArrayList) {
+                        album.moveToBargainBin();
+                        inventoryListModel.removeElement(album);
+                    }
+
+                } else if (albumAgingTextArea.getText().contains("donate")) {
+                    for (Album album : albumAgingArrayList) {
+                        album.setDonated();
+                        inventoryListModel.removeElement(album);
+                    }
+                }
             }
         });
     }

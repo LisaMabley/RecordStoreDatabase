@@ -292,21 +292,7 @@ public class DataModel {
             allStatements.add(psSearch);
             psSearch.setString(1, searchString);
             resultSet = psSearch.executeQuery();
-
-            while (resultSet.next()) {
-                int albumId = resultSet.getInt("albumId");
-                int consignor = resultSet.getInt("consignorId");
-                String artist = resultSet.getString("artist");
-                String title = resultSet.getString("title");
-                int size = resultSet.getInt("size");
-                int condition = resultSet.getInt("condition");
-                float price = resultSet.getFloat("price");
-                int status = resultSet.getInt("status");
-                // TODO probably need other fields here
-
-                Album newAlbum = new Album(albumId, consignor, artist, title, size, condition, price, status);
-                searchResults.add(newAlbum);
-            }
+            searchResults = resultSetToArrayList(resultSet);
 
         } catch (SQLException sqle) {
             System.out.println("Could not execute search.");
@@ -374,6 +360,61 @@ public class DataModel {
             System.out.println("Could not update album status.");
             System.out.println(sqlException);
         }
+    }
+
+    public static ArrayList<Album> findAlbumsOfAge(java.sql.Date consignedBefore, int status) {
+
+        ArrayList<Album> albumsConsignedBeforeDate = new ArrayList<Album>();
+        String agingSql = "";
+
+        if (status == Album.STORE) {
+            agingSql = "SELECT * FROM albums WHERE status = 1 AND date_consigned < ?";
+
+        } else if (status == Album.BARGAIN_BIN) {
+            agingSql = "SELECT * FROM albums WHERE status = 2 AND date_consigned < ?";
+
+        } else {
+            return null;
+        }
+
+        try {
+            PreparedStatement psAging = connection.prepareStatement(agingSql);
+            allStatements.add(psAging);
+            psAging.setDate(1, consignedBefore);
+            resultSet = psAging.executeQuery();
+            albumsConsignedBeforeDate = resultSetToArrayList(resultSet);
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not execute search.");
+            System.out.println(sqle);
+        }
+
+        return albumsConsignedBeforeDate;
+    }
+
+    private static ArrayList<Album> resultSetToArrayList(ResultSet resultSet) {
+        ArrayList<Album> arraylist = new ArrayList<Album>();
+
+        try {
+            while (resultSet.next()) {
+                int albumId = resultSet.getInt("albumId");
+                int consignor = resultSet.getInt("consignorId");
+                String artist = resultSet.getString("artist");
+                String title = resultSet.getString("title");
+                int size = resultSet.getInt("size");
+                int condition = resultSet.getInt("condition");
+                float price = resultSet.getFloat("price");
+                int status = resultSet.getInt("status");
+
+                Album newAlbum = new Album(albumId, consignor, artist, title, size, condition, price, status);
+                arraylist.add(newAlbum);
+            }
+        } catch (SQLException sqle) {
+            System.out.println("Could not create album.");
+            System.out.println(sqle);
+        }
+
+        return arraylist;
     }
 
     public static void closeDbConnections() {
