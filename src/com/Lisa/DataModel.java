@@ -40,7 +40,7 @@ public class DataModel {
         String createAlbumTableAction = "Create album table";
         executeSqlUpdate(createAlbumsTableSQL, createAlbumTableAction);
 
-        String createConsignorsTableSQL = "CREATE TABLE consignors (consignorId int PRIMARY KEY GENERATED ALWAYS AS IDENTITY, name varchar(30), phone varchar(30), amount_owed FLOAT)";
+        String createConsignorsTableSQL = "CREATE TABLE consignors (consignorId int PRIMARY KEY GENERATED ALWAYS AS IDENTITY, name varchar(30), phone varchar(15), email varchar(30), amount_owed FLOAT)";
         String createConsignorsTableAction = "Create consignors table";
         executeSqlUpdate(createConsignorsTableSQL, createConsignorsTableAction);
 
@@ -103,22 +103,22 @@ public class DataModel {
         String sqlAction = "Insert consigner";
 
         // Test data SQL
-        String addConsignor1 = "INSERT INTO consignors (name, phone) VALUES ('Eric Makela', '612-518-2421')" ;
+        String addConsignor1 = "INSERT INTO consignors (name, email, phone) VALUES ('Eric Makela', 'sweetiecutie@gmail.com', '612-518-2421')" ;
         executeSqlUpdate(addConsignor1, sqlAction);
 
-        String addConsignor2 = "INSERT INTO consignors (name, phone) VALUES ('Anitra Budd', '612-618-3421')" ;
+        String addConsignor2 = "INSERT INTO consignors (name, email, phone) VALUES ('Anitra Budd', 'sweetiecutie@gmail.com', '612-618-3421')" ;
         executeSqlUpdate(addConsignor2, sqlAction);
 
-        String addConsignor3 = "INSERT INTO consignors (name, phone) VALUES ('Neil Taylor', '612-718-4421')" ;
+        String addConsignor3 = "INSERT INTO consignors (name, email, phone) VALUES ('Neil Taylor', 'sweetiecutie@gmail.com', '612-718-4421')" ;
         executeSqlUpdate(addConsignor3, sqlAction);
 
-        String addConsignor4 = "INSERT INTO consignors (name, phone) VALUES ('Anj Ronay', '612-818-5421')" ;
+        String addConsignor4 = "INSERT INTO consignors (name, email, phone) VALUES ('Anj Ronay', 'sweetiecutie@gmail.com', '612-818-5421')" ;
         executeSqlUpdate(addConsignor4, sqlAction);
 
-        String addConsignor5 = "INSERT INTO consignors (name, phone) VALUES ('Shauna Jemai', '612-918-6421')" ;
+        String addConsignor5 = "INSERT INTO consignors (name, email, phone) VALUES ('Shauna JeMai', 'sweetiecutie@gmail.com', '612-918-6421')" ;
         executeSqlUpdate(addConsignor5, sqlAction);
 
-        String addConsignor6 = "INSERT INTO consignors (name, phone) VALUES ('Garret Ferderber', '612-018-7421')" ;
+        String addConsignor6 = "INSERT INTO consignors (name, email, phone) VALUES ('Garret Ferderber', 'sweetiecutie@gmail.com', '612-018-7421')" ;
         executeSqlUpdate(addConsignor6, sqlAction);
     }
 
@@ -159,10 +159,12 @@ public class DataModel {
                 int size = randomNumberGenerator.nextInt(6) + 1;
                 int condition = randomNumberGenerator.nextInt(6) + 1;
                 int status = randomNumberGenerator.nextInt(2) + 1;
+                int intPrice = randomNumberGenerator.nextInt(40) + 1;
+                float price = intPrice;
 
                 int month = randomNumberGenerator.nextInt(12) + 1;
                 int day = randomNumberGenerator.nextInt(28) + 1;
-                int year = randomNumberGenerator.nextInt(15) + 1;
+                int year = randomNumberGenerator.nextInt(3) + 13;
                 String stringMonth = "";
                 String stringDay = "";
                 String stringYear = "";
@@ -189,7 +191,7 @@ public class DataModel {
                 java.sql.Date dateConsigned = java.sql.Date.valueOf(stringDate);
 
                 // Add each line to database
-                executeAddAlbumSql(artist, title, size, condition, dateConsigned, status);
+                executeAddAlbumSql(artist, title, size, condition, dateConsigned, status, price);
             }
             buffReader.close();
 
@@ -200,12 +202,12 @@ public class DataModel {
         }
     }
 
-    protected static void executeAddAlbumSql(String artist, String title, int size, int condition, java.sql.Date date_consigned, int status) {
+    protected static void executeAddAlbumSql(String artist, String title, int size, int condition, java.sql.Date date_consigned, int status, float price) {
         // TODO remove when final
 
         try {
-            String psInsertSql = "INSERT INTO albums (artist, title, size, condition, date_consigned, status) " +
-                    "VALUES ( ?, ?, ? , ?, ?, ? )";
+            String psInsertSql = "INSERT INTO albums (artist, title, size, condition, date_consigned, status, price) " +
+                    "VALUES ( ?, ?, ? , ?, ?, ?, ? )";
             PreparedStatement psAlbum = connection.prepareStatement(psInsertSql);
             allStatements.add(psAlbum);
             psAlbum.setString(1, artist);
@@ -214,6 +216,7 @@ public class DataModel {
             psAlbum.setInt(4, condition);
             psAlbum.setDate(5, date_consigned);
             psAlbum.setInt(6, status);
+            psAlbum.setFloat(7, price);
             executeSqlUpdate(psAlbum, "Add album");
 
         } catch (SQLException sqlException) {
@@ -224,16 +227,17 @@ public class DataModel {
 
     public static ArrayList<Consignor> getConsignors() {
         ArrayList<Consignor> consignorList = new ArrayList<Consignor>();
-        String getNamesAction = "Get consignor names";
-        String getNamesSql = "SELECT * FROM consignors";
+        String getConsignorsAction = "Get consignors";
+        String getConsignorsSql = "SELECT * FROM consignors";
 
         try {
-            ResultSet consignorRS = executeSqlQuery(getNamesSql, getNamesAction);
+            ResultSet consignorRS = executeSqlQuery(getConsignorsSql, getConsignorsAction);
             while (consignorRS.next()) {
                 String consignorName = consignorRS.getString("name");
+                String consignorEmail = consignorRS.getString("email");
                 String consignorPhone = consignorRS.getString("phone");
                 int id = consignorRS.getInt("consignorId");
-                Consignor newConsignor = new Consignor(consignorName, consignorPhone, id);
+                Consignor newConsignor = new Consignor(consignorName, consignorEmail, consignorPhone, id);
                 consignorList.add(newConsignor);
             }
 
@@ -278,10 +282,10 @@ public class DataModel {
         ArrayList<Album> searchResults = new ArrayList<Album>();
 
         if (fieldToSearch == RecordStoreGUI.ARTIST_FIELD) {
-            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND artist = ?";
+            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND artist LIKE ?";
 
         } else if (fieldToSearch == RecordStoreGUI.TITLE_FIELD) {
-            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND title = ?";
+            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND title LIKE ?";
 
         } else {
             return null;
@@ -290,7 +294,8 @@ public class DataModel {
         try {
             PreparedStatement psSearch = connection.prepareStatement(searchSql);
             allStatements.add(psSearch);
-            psSearch.setString(1, searchString);
+            String searchStringPlusPercentSigns = "%" + searchString + "%";
+            psSearch.setString(1, searchStringPlusPercentSigns);
             resultSet = psSearch.executeQuery();
             searchResults = resultSetToArrayList(resultSet);
 
@@ -358,6 +363,27 @@ public class DataModel {
 
         } catch (SQLException sqlException) {
             System.out.println("Could not update album status.");
+            System.out.println(sqlException);
+        }
+    }
+
+    public static void updateAlbumPrice(Album albumToUpdate, int newPrice) {
+
+        int albumId = albumToUpdate.albumId;
+
+        try {
+            String updatePriceSql = "UPDATE albums SET price = ? WHERE albumId = ?";
+
+            PreparedStatement psUdateAlbumPrice = connection.prepareStatement(updatePriceSql);
+            allStatements.add(psUdateAlbumPrice);
+
+            psUdateAlbumPrice.setInt(1, newPrice);
+            psUdateAlbumPrice.setInt(2, albumId);
+
+            executeSqlUpdate(psUdateAlbumPrice, "Update album price");
+
+        } catch (SQLException sqlException) {
+            System.out.println("Could not update album price.");
             System.out.println(sqlException);
         }
     }

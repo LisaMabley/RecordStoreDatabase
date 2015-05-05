@@ -7,11 +7,13 @@ package com.Lisa;
 public class Consignor {
     protected int consignorId;
     protected String name;
+    protected String email;
     protected String phoneNumber;
     protected float amountOwed;
 
-    public Consignor(String name, String phone, int id) {
+    public Consignor(String name, String phone, String email, int id) {
         this.name = name;
+        this.email = email;
         this.phoneNumber = phone;
         this.consignorId = id;
     }

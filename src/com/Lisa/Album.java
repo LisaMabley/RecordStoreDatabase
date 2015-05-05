@@ -71,6 +71,7 @@ public class Album {
     public void setSoldDate() {
         java.util.Date utilDate = new java.util.Date();
         this.dateSold = new java.sql.Date(utilDate.getTime());
+        System.out.println("Sold date: " + this.dateSold);
     }
 
     public void moveToBargainBin() {

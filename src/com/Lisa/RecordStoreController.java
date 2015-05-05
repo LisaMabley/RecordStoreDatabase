@@ -12,6 +12,12 @@ public class RecordStoreController {
 
         model = new DataModel();
         RecordStoreGUI gui = new RecordStoreGUI();
+//        TabsJFrame tabbedPane = new TabsJFrame();
+//        SellGUI sell = new SellGUI();
+    }
+
+    public static ArrayList<Consignor> requestConsignors() {
+        return DataModel.getConsignors();
     }
 
     public static int requestInventoryCheck(String artist, String title, int status) {
@@ -23,27 +29,31 @@ public class RecordStoreController {
     }
 
     public static ArrayList<Album> requestSearchInventory(String searchString, int searchField) {
-        ArrayList<Album> results = DataModel.searchInventoryForAlbums(searchString, searchField);
-        return results;
+        return DataModel.searchInventoryForAlbums(searchString, searchField);
     }
 
     public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {
         if (newStatus == Album.SOLD) {
+            System.out.println("New status: " + newStatus);
             albumToUpdate.setSoldDate();
         }
         DataModel.updateAlbumStatus(albumToUpdate, newStatus);
     }
 
-    public static ArrayList<Album> requestAlbumsOfAge(int seekingAlbumsTo) {
+    public static void requestUpdateAlbumPrice(Album albumToUpdate, int newPrice) {
+        DataModel.updateAlbumPrice(albumToUpdate, newPrice);
+    }
+
+    public static ArrayList<Album> requestAlbumsOfAge(int ageToFind) {
 
         int findAlbumsOfStatus = 0;
         // First read about Calendar class at URL below
         // http://stackoverflow.com/questions/6439946/java-date-problems-finding-the-date-x-days-ago
         Calendar calendar = Calendar.getInstance();
-        if (seekingAlbumsTo == RecordStoreGUI.MOVE_TO_BARGAINBIN) {
+        if (ageToFind == RecordStoreGUI.THIRTY_SEVEN_DAYS) {
             calendar.add(Calendar.DAY_OF_MONTH, -37);
             findAlbumsOfStatus = Album.STORE;
-        } else if (seekingAlbumsTo == RecordStoreGUI.DONATE) {
+        } else if (ageToFind == RecordStoreGUI.THIRTEEN_MONTHS) {
             calendar.add(Calendar.YEAR, -1);
             findAlbumsOfStatus = Album.BARGAIN_BIN;
         }
