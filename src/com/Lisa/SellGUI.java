@@ -109,4 +109,8 @@ public class SellGUI extends JPanel {
             searchResultsListModel.removeAllElements();
         }
     }
+
+    public JPanel getPanel() {
+        return sellGuiJPanel;
+    }
 }

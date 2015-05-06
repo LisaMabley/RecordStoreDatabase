@@ -111,9 +111,9 @@
           </component>
         </children>
       </grid>
-      <grid id="27dc6" binding="buyPanel" layout-manager="GridBagLayout">
+      <grid id="27dc6" binding="acquireAlbumPanel" layout-manager="GridBagLayout">
         <constraints>
-          <tabbedpane title="Buy Album"/>
+          <tabbedpane title="Acquire Album"/>
         </constraints>
         <properties>
           <minimumSize width="700" height="550"/>
@@ -130,7 +130,7 @@
             <properties>
               <focusTraversalPolicyProvider value="false"/>
               <maximumSize width="170" height="2147483647"/>
-              <minimumSize width="170" height="28"/>
+              <minimumSize width="270" height="28"/>
               <text value=""/>
             </properties>
           </component>
@@ -207,6 +207,7 @@
             <properties>
               <background color="-1118482"/>
               <minimumSize width="170" height="16"/>
+              <preferredSize width="230" height="16"/>
             </properties>
           </component>
           <component id="d0857" class="javax.swing.JButton" binding="buyAlbumButton" default-binding="true">
@@ -227,6 +228,7 @@
               <gridbag top="10" left="15" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <preferredSize width="170" height="16"/>
               <text value="Artist"/>
             </properties>
           </component>
@@ -288,13 +290,63 @@
           </component>
         </children>
       </grid>
-      <grid id="e7860" layout-manager="GridBagLayout">
+      <grid id="e7860" binding="accountPanel" layout-manager="GridBagLayout">
         <constraints>
-          <tabbedpane title="Manage Consignor Accounts"/>
+          <tabbedpane title="Consignor Accounts"/>
         </constraints>
         <properties/>
         <border type="none"/>
         <children>
+          <scrollpane id="3b0bd">
+            <constraints>
+              <grid row="4" column="2" row-span="7" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="3eb4c" class="javax.swing.JList" binding="consignorsAlbumsJList">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="81c5f" class="javax.swing.JLabel" binding="amountOwedLabel">
+            <constraints>
+              <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="10" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Amount owed:"/>
+            </properties>
+          </component>
+          <vspacer id="c5c50">
+            <constraints>
+              <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+          </vspacer>
+          <component id="accc5" class="javax.swing.JTextArea" binding="recentPaymentsTextArea">
+            <constraints>
+              <grid row="13" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <background color="-1118482"/>
+              <minimumSize width="40" height="40"/>
+            </properties>
+          </component>
+          <component id="ede9c" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Recent payments:"/>
+            </properties>
+          </component>
           <component id="5d14a" class="javax.swing.JLabel">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -304,13 +356,7 @@
               <text value="Name"/>
             </properties>
           </component>
-          <hspacer id="434e7">
-            <constraints>
-              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-          </hspacer>
-          <component id="e258f" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+          <component id="e258f" class="javax.swing.JTextField" binding="consignorNameTextField">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -328,7 +374,7 @@
               <text value="Email Address"/>
             </properties>
           </component>
-          <component id="88306" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+          <component id="88306" class="javax.swing.JTextField" binding="consignorEmailTextField">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -346,7 +392,7 @@
               <text value="Phone Number"/>
             </properties>
           </component>
-          <component id="d4ea9" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+          <component id="d4ea9" class="javax.swing.JTextField" binding="consignorPhoneTextField">
             <constraints>
               <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -354,45 +400,6 @@
               <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties/>
-          </component>
-          <scrollpane id="3b0bd">
-            <constraints>
-              <grid row="3" column="2" row-span="6" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <component id="3eb4c" class="javax.swing.JList" binding="list1" default-binding="true">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
-          </scrollpane>
-          <component id="b619e" class="javax.swing.JComboBox" binding="comboBox2" default-binding="true">
-            <constraints>
-              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties/>
-          </component>
-          <component id="6ffe2" class="javax.swing.JButton" binding="findAlbumsButton" default-binding="true">
-            <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Find Albums:"/>
-            </properties>
-          </component>
-          <component id="e05a1" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="10" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Select consignor to edit"/>
-            </properties>
           </component>
           <component id="fa372" class="javax.swing.JButton" binding="addNewConsignorButton" default-binding="true">
             <constraints>
@@ -403,132 +410,59 @@
               <text value="Add New Consignor"/>
             </properties>
           </component>
-          <component id="700e7" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+          <component id="fba38" class="javax.swing.JButton" binding="editSelectedConsignorButton" default-binding="true">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Edit Selected Consignor"/>
+            </properties>
+          </component>
+          <component id="700e7" class="javax.swing.JComboBox" binding="consignorNamesComboBox">
+            <constraints>
+              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties/>
           </component>
-          <component id="81c5f" class="javax.swing.JLabel">
+          <component id="6ffe2" class="javax.swing.JButton" binding="findAlbumsButton" default-binding="true">
             <constraints>
-              <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Find Albums:"/>
+            </properties>
+          </component>
+          <component id="b619e" class="javax.swing.JComboBox" binding="albumStatusComboBox">
+            <constraints>
+              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="5" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+          </component>
+          <hspacer id="2188d">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+          </hspacer>
+          <component id="275e7" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag top="5" left="10" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <text value="Amount owed:"/>
+              <text value="Add a new consignor, edit "/>
             </properties>
           </component>
-          <vspacer id="c5c50">
+          <vspacer id="895b4">
             <constraints>
-              <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
           </vspacer>
-          <component id="accc5" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
-            <constraints>
-              <grid row="11" column="2" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <background color="-1118482"/>
-            </properties>
-          </component>
-          <component id="ede9c" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Recent payments:"/>
-            </properties>
-          </component>
-        </children>
-      </grid>
-      <grid id="ee865" binding="manageConsignorsJPanel" layout-manager="CardLayout" hgap="0" vgap="0">
-        <constraints>
-          <tabbedpane title="Manage Consignors"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
-        <children/>
-      </grid>
-      <grid id="fc9e0" binding="inventoryPanel" layout-manager="GridBagLayout">
-        <constraints>
-          <tabbedpane title="Manage Inventory"/>
-        </constraints>
-        <properties>
-          <preferredSize width="550" height="550"/>
-        </properties>
-        <border type="none"/>
-        <children>
-          <scrollpane id="93c90" binding="inventoryScrollpane">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <maximumSize width="280" height="280"/>
-              <minimumSize width="200" height="100"/>
-              <visible value="true"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="e5b16" class="javax.swing.JList" binding="albumAgingJList">
-                <constraints/>
-                <properties/>
-              </component>
-            </children>
-          </scrollpane>
-          <component id="be16f" class="javax.swing.JButton" binding="findAlbumsOver37Button" default-binding="true">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Find Albums Over 37 Days"/>
-            </properties>
-          </component>
-          <component id="512ea" class="javax.swing.JButton" binding="markAllButton" default-binding="true">
-            <constraints>
-              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Mark All"/>
-            </properties>
-          </component>
-          <component id="f5e8f" class="javax.swing.JButton" binding="markSelectedButton" default-binding="true">
-            <constraints>
-              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Mark Selected"/>
-            </properties>
-          </component>
-          <component id="4ddf7" class="javax.swing.JButton" binding="findAlbumsOver13Button" default-binding="true">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <text value="Find Albums Over 13 Months"/>
-            </properties>
-          </component>
-          <component id="7cb73" class="javax.swing.JTextArea" binding="albumAgingTextArea">
-            <constraints>
-              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                <preferred-size width="150" height="50"/>
-              </grid>
-              <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-            </constraints>
-            <properties>
-              <background color="-1118482"/>
-            </properties>
-          </component>
         </children>
       </grid>
     </children>

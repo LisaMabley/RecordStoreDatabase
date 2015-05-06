@@ -11,9 +11,8 @@ public class RecordStoreController {
     public static void main(String[] args) {
 
         model = new DataModel();
-        RecordStoreGUI gui = new RecordStoreGUI();
-//        TabsJFrame tabbedPane = new TabsJFrame();
-//        SellGUI sell = new SellGUI();
+//        RecordStoreGUI gui = new RecordStoreGUI();
+        TabsGUI tabs = new TabsGUI();
     }
 
     public static ArrayList<Consignor> requestConsignors() {
@@ -30,6 +29,10 @@ public class RecordStoreController {
 
     public static ArrayList<Album> requestSearchInventory(String searchString, int searchField) {
         return DataModel.searchInventoryForAlbums(searchString, searchField);
+    }
+
+    public static void requestAddConsignor(String name, String email, String phone) {
+        DataModel.addConsignor(name, email, phone);
     }
 
     public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {

@@ -331,6 +331,26 @@ public class DataModel {
         }
     }
 
+    public static void addConsignor(String name, String email, String phone) {
+        // TODO Do not allow duplicates to be entered
+
+        try {
+            String psInsertConsignorSql = "INSERT INTO consignors (name, email, phone) " +
+                    "VALUES ( ?, ?, ? )";
+            PreparedStatement psConsignor = connection.prepareStatement(psInsertConsignorSql);
+            allStatements.add(psConsignor);
+            psConsignor.setString(1, name);
+            psConsignor.setString(2, email);
+            psConsignor.setString(3, phone);
+            psConsignor.executeUpdate();
+            System.out.println("Added consignor: " + name);
+
+        } catch (SQLException sqlException) {
+            System.out.println("Could not add consignor.");
+            System.out.println(sqlException);
+        }
+    }
+
     public static void updateAlbumStatus(Album albumToUpdate, int newStatus) {
 
         int albumId = albumToUpdate.albumId;
