@@ -8,6 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by lisa on 5/6/15.
  */
+
 public class InventoryGUI extends JPanel {
     private JList albumAgingJList;
     private JButton findAlbumsOver37Button;

@@ -28,9 +28,9 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-        createTableSQL();
-        createTestConsignorDataSQL();
-        createTestAlbumDataSQL();
+//        createTableSQL();
+//        createTestConsignorDataSQL();
+//        createTestAlbumDataSQL();
     }
 
     protected void createTableSQL() {
@@ -281,10 +281,10 @@ public class DataModel {
         String searchSql = "";
         ArrayList<Album> searchResults = new ArrayList<Album>();
 
-        if (fieldToSearch == RecordStoreGUI.ARTIST_FIELD) {
+        if (fieldToSearch == SellGUI.ARTIST_FIELD) {
             searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND artist LIKE ?";
 
-        } else if (fieldToSearch == RecordStoreGUI.TITLE_FIELD) {
+        } else if (fieldToSearch == SellGUI.TITLE_FIELD) {
             searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND title LIKE ?";
 
         } else {
