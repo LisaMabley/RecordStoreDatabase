@@ -1,105 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.Lisa.SellGUI">
-  <grid id="27dc6" binding="sellGuiJPanel" layout-manager="GridBagLayout">
+  <grid id="27dc6" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="381" height="291"/>
+      <xy x="20" y="20" width="700" height="550"/>
     </constraints>
-    <properties>
-      <preferredSize width="550" height="550"/>
-    </properties>
+    <properties/>
     <border type="none"/>
     <children>
-      <component id="ebffc" class="javax.swing.JLabel">
+      <grid id="194a1" binding="sellPanel" layout-manager="GridBagLayout">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="15" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <text value="Search by"/>
+          <maximumSize width="700" height="550"/>
+          <minimumSize width="700" height="550"/>
+          <preferredSize width="550" height="550"/>
         </properties>
-      </component>
-      <component id="169f6" class="javax.swing.JComboBox" binding="searchByCombobox">
-        <constraints>
-          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="0" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="f9a87" class="javax.swing.JButton" binding="searchButton" default-binding="true">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="0" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Search"/>
-        </properties>
-      </component>
-      <component id="b57dc" class="javax.swing.JTextField" binding="searchTextField">
-        <constraints>
-          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <gridbag top="0" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties/>
-      </component>
-      <scrollpane id="d28fb">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="13" bottom="10" right="13" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties/>
-        <border type="none"/>
+        <border type="empty"/>
         <children>
-          <component id="733a4" class="javax.swing.JList" binding="albumSearchResultsJList">
-            <constraints/>
+          <component id="3137e" class="javax.swing.JButton" binding="quitButton" default-binding="true">
+            <constraints>
+              <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Quit"/>
+            </properties>
+          </component>
+          <component id="32033" class="javax.swing.JButton" binding="sellAlbumButton" default-binding="true">
+            <constraints>
+              <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Sell Album"/>
+            </properties>
+          </component>
+          <component id="51d15" class="javax.swing.JButton" binding="cancelButton" default-binding="true">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Cancel"/>
+            </properties>
+          </component>
+          <scrollpane id="9">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="13" bottom="10" right="13" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <minimumSize width="250" height="150"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="bc974" class="javax.swing.JList" binding="albumSearchResultsJList">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="a76d6" class="javax.swing.JTextArea" binding="searchResultTextArea">
+            <constraints>
+              <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+              <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <background color="-1118482"/>
+              <minimumSize width="250" height="200"/>
+              <preferredSize width="250" height="16"/>
+            </properties>
+          </component>
+          <component id="ed3e4" class="javax.swing.JComboBox" binding="searchByCombobox">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
             <properties/>
           </component>
+          <component id="a3c95" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag top="10" left="15" bottom="0" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Search by"/>
+            </properties>
+          </component>
+          <component id="1c0c9" class="javax.swing.JTextField" binding="searchTextField">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+              <gridbag top="0" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="58afe" class="javax.swing.JButton" binding="searchButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag top="0" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <text value="Search"/>
+            </properties>
+          </component>
         </children>
-      </scrollpane>
-      <component id="bcdb6" class="javax.swing.JTextArea" binding="searchResultTextArea">
-        <constraints>
-          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <background color="-1118482"/>
-          <lineWrap value="false"/>
-          <maximumSize width="170" height="400"/>
-          <minimumSize width="170" height="70"/>
-          <preferredSize width="170" height="70"/>
-          <wrapStyleWord value="true"/>
-        </properties>
-      </component>
-      <component id="b4f66" class="javax.swing.JButton" binding="cancelButton" default-binding="true">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Cancel"/>
-        </properties>
-      </component>
-      <component id="8fa93" class="javax.swing.JButton" binding="sellAlbumButton" default-binding="true">
-        <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Sell Album"/>
-        </properties>
-      </component>
-      <component id="e32a6" class="javax.swing.JButton" binding="quitButton" default-binding="true">
-        <constraints>
-          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <text value="Quit"/>
-        </properties>
-      </component>
+      </grid>
     </children>
   </grid>
 </form>

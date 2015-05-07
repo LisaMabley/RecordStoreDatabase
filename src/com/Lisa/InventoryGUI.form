@@ -2,9 +2,13 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.Lisa.InventoryGUI">
   <grid id="27dc6" binding="inventoryPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="700" height="550"/>
     </constraints>
-    <properties/>
+    <properties>
+      <maximumSize width="700" height="550"/>
+      <minimumSize width="700" height="550"/>
+      <preferredSize width="700" height="550"/>
+    </properties>
     <border type="none"/>
     <children>
       <component id="1c152" class="javax.swing.JButton" binding="findAlbumsOver37Button" default-binding="true">

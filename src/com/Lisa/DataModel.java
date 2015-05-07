@@ -28,9 +28,9 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-//        createTableSQL();
-//        createTestConsignorDataSQL();
-//        createTestAlbumDataSQL();
+        createTableSQL();
+        createTestConsignorDataSQL();
+        createTestAlbumDataSQL();
     }
 
     protected void createTableSQL() {

@@ -11,7 +11,6 @@ public class RecordStoreController {
     public static void main(String[] args) {
 
         model = new DataModel();
-//        RecordStoreGUI gui = new RecordStoreGUI();
         TabsGUI tabs = new TabsGUI();
     }
 
@@ -53,10 +52,10 @@ public class RecordStoreController {
         // First read about Calendar class at URL below
         // http://stackoverflow.com/questions/6439946/java-date-problems-finding-the-date-x-days-ago
         Calendar calendar = Calendar.getInstance();
-        if (ageToFind == RecordStoreGUI.THIRTY_SEVEN_DAYS) {
+        if (ageToFind == InventoryGUI.THIRTY_SEVEN_DAYS) {
             calendar.add(Calendar.DAY_OF_MONTH, -37);
             findAlbumsOfStatus = Album.STORE;
-        } else if (ageToFind == RecordStoreGUI.THIRTEEN_MONTHS) {
+        } else if (ageToFind == InventoryGUI.THIRTEEN_MONTHS) {
             calendar.add(Calendar.YEAR, -1);
             findAlbumsOfStatus = Album.BARGAIN_BIN;
         }
