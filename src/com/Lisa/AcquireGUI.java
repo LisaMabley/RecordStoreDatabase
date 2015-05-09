@@ -12,9 +12,9 @@ public class AcquireGUI extends JPanel {
     private JPanel acquireAlbumPanel;
     private JTextField artistTextField;
     private JTextField titleTextField;
-    private JComboBox consignorCombobox;
-    private JComboBox sizeCombobox;
-    private JComboBox conditionCombobox;
+    private JComboBox<Consignor> consignorCombobox;
+    private JComboBox<String> sizeCombobox;
+    private JComboBox<String> conditionCombobox;
     private JTextField priceTextField;
     private JButton checkInventoryButton;
     private JTextArea inventoryTextArea;

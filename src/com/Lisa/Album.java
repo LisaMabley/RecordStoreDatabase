@@ -1,5 +1,10 @@
 package com.Lisa;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by lisa on 4/21/15.
  */
@@ -40,6 +45,8 @@ public class Album {
     protected static final int DONATED = 4;
     protected static final int RETURNED_TO_CONSIGNOR = 5;
 
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
+
     Album(int consignorId, String artistName, String albumTitle, int size, int condition, float price) {
         this.consignorId = consignorId;
         this.artist = artistName;
@@ -53,7 +60,6 @@ public class Album {
     }
 
     Album(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, int status) {
-        // TODO add all possible fields here, use null values if needed
         this.albumId = id;
         this.consignorId = consignor;
         this.artist = artistName;
@@ -64,8 +70,19 @@ public class Album {
         java.util.Date utilDate = new java.util.Date();
         this.dateConsigned = new java.sql.Date(utilDate.getTime());
         this.status = status;
+    }
 
-        // TODO why is price always $0?
+    Album(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, java.util.Date dateConsigned, int status, java.util.Date dateSold) {
+        this.albumId = id;
+        this.consignorId = consignor;
+        this.artist = artistName;
+        this.title = albumTitle;
+        this.size = size;
+        this.condition = condition;
+        this.price = price;
+        this.dateConsigned = (java.sql.Date) dateConsigned;
+        this.status = status;
+        this.dateSold = (java.sql.Date) dateSold;
     }
 
     public void setSoldDate() {
@@ -84,7 +101,35 @@ public class Album {
         this.price = 0;
     }
 
-    public String getDetailString() {
+//    public void setReturnedToConsignor() {
+//        this.status = RETURNED_TO_CONSIGNOR;
+//        this.price = 0;
+//    }
+
+    private String getDateStatusWillChange() {
+
+        String dateStatusWillChange = "";
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date utilDate = this.dateConsigned;
+        System.out.println(utilDate);
+        calendar.setTime(utilDate);
+        dateFormat.setCalendar(calendar);
+
+        switch (this.status) {
+            case 1:
+                calendar.add(Calendar.DAY_OF_MONTH, 37);
+                return dateFormat.format(calendar.getTime());
+
+            case 2:
+                calendar.add(Calendar.YEAR, 1);
+                return dateFormat.format(calendar.getTime());
+
+            default:
+                return this.toString();
+        }
+    }
+
+    public String getDetailsForBuyers() {
         StringBuilder stringBuilder = new StringBuilder();
         String titleDetail = "Title: " + this.title + "\n";
         stringBuilder.append(titleDetail);
@@ -105,6 +150,28 @@ public class Album {
         stringBuilder.append(statusDetail);
 
         return stringBuilder.toString();
+    }
+
+    public String getDetailsForConsignor() {
+        switch (this.status) {
+            case 1:
+                return this.albumId + ". " + this.title + ", to Bargain Bin on " + this.getDateStatusWillChange();
+
+            case 2:
+                return this.albumId + ". " + this.title + ", will be donated on " + this.getDateStatusWillChange();
+
+            case 3:
+                return this.albumId + ". " + this.title + ", sold on " + dateFormat.format(this.dateSold);
+
+            case 4:
+                return this.albumId + ". " + this.title + ", donated to charity";
+
+            case 5:
+                return this.albumId + ". " + this.title + ", returned to you";
+
+            default:
+                return this.albumId + ". " + this.toString();
+        }
     }
 
     @Override

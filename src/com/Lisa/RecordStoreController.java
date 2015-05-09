@@ -1,5 +1,6 @@
 package com.Lisa;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -34,17 +35,24 @@ public class RecordStoreController {
         DataModel.addConsignor(name, email, phone);
     }
 
-    public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {
-        if (newStatus == Album.SOLD) {
-            System.out.println("New status: " + newStatus);
-            albumToUpdate.setSoldDate();
-        }
-        DataModel.updateAlbumStatus(albumToUpdate, newStatus);
+    public static void requestRemoveConsignor(Consignor consignorToRemove) {
+        DataModel.removeConsignor(consignorToRemove);
     }
 
-    public static void requestUpdateAlbumPrice(Album albumToUpdate, int newPrice) {
-        DataModel.updateAlbumPrice(albumToUpdate, newPrice);
+    public static void requestUpdateAlbumStatus(int albumId, int newStatus) {
+        DataModel.updateAlbumStatus(albumId, newStatus);
     }
+
+    public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {
+        if (newStatus == Album.SOLD) {
+            albumToUpdate.setSoldDate();
+        }
+        DataModel.updateAlbumStatus(albumToUpdate.albumId, newStatus, albumToUpdate.dateSold);
+    }
+
+//    public static void requestUpdateAlbumPrice(Album albumToUpdate, int newPrice) {
+//        DataModel.updateAlbumPrice(albumToUpdate, newPrice);
+//    }
 
     public static ArrayList<Album> requestAlbumsOfAge(int ageToFind) {
 
@@ -63,5 +71,10 @@ public class RecordStoreController {
         java.sql.Date findAlbumsConsignedBefore = new java.sql.Date(utilDate.getTime());
 
         return DataModel.findAlbumsOfAge(findAlbumsConsignedBefore, findAlbumsOfStatus);
+    }
+
+    public static ArrayList<Album> requestAllConsignorsAlbums(int consignorId) {
+
+        return DataModel.findAlbumsFromConsignor(consignorId);
     }
 }

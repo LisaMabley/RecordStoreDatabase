@@ -26,4 +26,8 @@ public class Consignor {
     public String toString() {
         return this.name;
     }
+
+    public String getDetails() {
+        return this.name + ": " + this.email + ", " + this.phoneNumber;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public class InventoryGUI extends JPanel {
-    private JList albumAgingJList;
+    private JList<Album> albumAgingJList;
     private JButton findAlbumsOver37Button;
     private JButton markAllButton;
     private JButton markSelectedButton;
@@ -79,12 +79,12 @@ public class InventoryGUI extends JPanel {
 
                 if (selectedAlbum.status == Album.STORE) {
                     RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.BARGAIN_BIN);
-                    RecordStoreController.requestUpdateAlbumPrice(selectedAlbum, 1);
+//                    RecordStoreController.requestUpdateAlbumPrice(selectedAlbum, 1);
                     selectedAlbum.moveToBargainBin();
 
                 } else if (selectedAlbum.status == Album.BARGAIN_BIN) {
                     RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.DONATED);
-                    RecordStoreController.requestUpdateAlbumPrice(selectedAlbum, 0);
+//                    RecordStoreController.requestUpdateAlbumPrice(selectedAlbum, 0);
                     selectedAlbum.setDonated();
                 }
             }
@@ -98,7 +98,7 @@ public class InventoryGUI extends JPanel {
                     for (Album album : albumAgingArrayList) {
                         album.moveToBargainBin();
                         RecordStoreController.requestUpdateAlbumStatus(album, Album.BARGAIN_BIN);
-                        RecordStoreController.requestUpdateAlbumPrice(album, 1);
+//                        RecordStoreController.requestUpdateAlbumPrice(album, 1);
                         albumAgingListModel.removeElement(album);
                     }
 
@@ -106,7 +106,7 @@ public class InventoryGUI extends JPanel {
                     for (Album album : albumAgingArrayList) {
                         album.setDonated();
                         RecordStoreController.requestUpdateAlbumStatus(album, Album.DONATED);
-                        RecordStoreController.requestUpdateAlbumPrice(album, 0);
+//                        RecordStoreController.requestUpdateAlbumPrice(album, 0);
                         albumAgingListModel.removeElement(album);
                     }
                 }

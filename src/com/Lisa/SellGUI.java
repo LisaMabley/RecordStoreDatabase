@@ -20,7 +20,7 @@ public class SellGUI extends JPanel {
     private JButton cancelButton;
     private JList<Album> albumSearchResultsJList;
     private JTextArea searchResultTextArea;
-    private JComboBox searchByCombobox;
+    private JComboBox<String> searchByCombobox;
     private JTextField searchTextField;
     private JButton searchButton;
 
@@ -67,7 +67,7 @@ public class SellGUI extends JPanel {
             public void valueChanged(ListSelectionEvent e) {
                 if (!albumSearchResultsJList.isSelectionEmpty()) {
                     Album selectedAlbum = albumSearchResultsJList.getSelectedValue();
-                    searchResultTextArea.setText(selectedAlbum.getDetailString());
+                    searchResultTextArea.setText(selectedAlbum.getDetailsForBuyers());
                 }
             }
         });
@@ -111,7 +111,7 @@ public class SellGUI extends JPanel {
         searchTextField.setText("");
         searchResultTextArea.setText("");
 
-        if (!searchResultsListModel.isEmpty() && searchResultsListModel != null) {
+        if (!searchResultsListModel.isEmpty()) {
             searchResultsListModel.removeAllElements();
         }
     }

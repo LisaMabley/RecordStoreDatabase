@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by lisa on 5/6/15.
+ * Created by lisa on 5/6/15. Adapted from Clara James
+ * https://github.com/minneapolis-edu/TabbedJFrame
  */
 
 public class TabsGUI extends JFrame {

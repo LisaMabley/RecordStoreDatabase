@@ -1,70 +1,64 @@
 package com.Lisa;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
  * Created by lisa on 5/6/15.
  */
-public class AccountsGUI {
+
+public class AccountsGUI extends JPanel {
     private JPanel accountPanel;
-    private JList<Album> consignorsAlbumsJList;
+    private JList<String> consignorsAlbumsJList;
     private JLabel amountOwedLabel;
-    private JTextArea recentPaymentsTextArea;
     private JTextField consignorNameTextField;
     private JTextField consignorEmailTextField;
     private JTextField consignorPhoneTextField;
     private JButton addNewConsignorButton;
     private JButton editSelectedConsignorButton;
-    private JComboBox consignorNamesComboBox;
-    private JButton findAlbumsButton;
-    private JComboBox albumStatusComboBox;
+    private JComboBox<Consignor> consignorNamesComboBox;
+    private JComboBox<String> albumStatusComboBox;
+    private JButton deleteSelectedConsignorButton;
+    private JTextArea addEditAndDeleteTextArea;
+    private JList<Payment> paymentsJList;
+    private JButton returnSelectedAlbumToButton;
 
+    protected static ArrayList<Consignor> consignorArrayList = new ArrayList<Consignor>();
     protected static DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
+    private static DefaultListModel<String> consignorAlbumListModel = new DefaultListModel<String>();
 
+    // Constructor
     public AccountsGUI() {
-        // CONSIGNOR ACCOUNTS
-        // Set options for album status comboBox
-        final String store = "In Store";
-        final String bargain = "In Bargain Bin";
-        final String sold = "Sold";
-        final String donated = "Donated";
 
-        albumStatusComboBox.addItem(store);
-        albumStatusComboBox.addItem(bargain);
-        albumStatusComboBox.addItem(sold);
-        albumStatusComboBox.addItem(donated);
-        albumStatusComboBox.setSelectedItem(store);
+        // Create list models for consignor album list
+        consignorsAlbumsJList.setModel(consignorAlbumListModel);
+        consignorsAlbumsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Set model for consignor combobox
         consignorNamesComboBox.setModel(consignorComboBoxModel);
+        refreshConsignorList();
 
-        // Populate model
-        final ArrayList<Consignor> consignorArrayList = RecordStoreController.requestConsignors();
-        for (Consignor consignor : consignorArrayList) {
-            AccountsGUI.consignorComboBoxModel.addElement(consignor);
-        }
-
-        // Set default
-        consignorNamesComboBox.setSelectedItem(null);
+        // Set default selection
+        consignorNamesComboBox.setSelectedItem(consignorComboBoxModel.getElementAt(0));
 
         consignorNamesComboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
+                Consignor consignorSelected = (Consignor) consignorNamesComboBox.getSelectedItem();
+                if (e.getStateChange() == ItemEvent.SELECTED && !consignorSelected.name.equalsIgnoreCase("none selected")) {
                     Consignor selectedConsignor = (Consignor) consignorNamesComboBox.getSelectedItem();
                     consignorNameTextField.setText(selectedConsignor.name);
                     consignorEmailTextField.setText(selectedConsignor.email);
                     consignorPhoneTextField.setText(selectedConsignor.phoneNumber);
+                    getConsignorAlbumDetails(selectedConsignor.consignorId);
 
-                } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+                } else {
+                    // No consignor selected
                     consignorNameTextField.setText("");
                     consignorEmailTextField.setText("");
                     consignorPhoneTextField.setText("");
+                    consignorAlbumListModel.removeAllElements();
                 }
             }
         });
@@ -72,35 +66,89 @@ public class AccountsGUI {
         addNewConsignorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            // TODO Input validation!!!
-            String name = consignorNameTextField.getText();
-            boolean duplicate = false;
+                String nameInput = consignorNameTextField.getText();
+                boolean duplicate = false;
 
-//            for (Consignor consignor : consignorArrayList) {
-//                if (consignor.name.equalsIgnoreCase(name)) {
-//                    // Popup: name is already in database! Continue, or cancel
-//
-//                    String[] dialogOptions = {"Cancel", "Continue"};
-//                    int n = JOptionPane.showOptionDialog(frame,
-//                            "Would you like green eggs and ham?",
-//                            "A Silly Question",
-//                            JOptionPane.YES_NO_OPTION,
-//                            JOptionPane.WARNING_MESSAGE,
-//                            null,     //do not use a custom Icon
-//                            dialogOptions,  //the titles of buttons
-//                            dialogOptions[1]); //default button title
-//
-//                    duplicate = true;
-//                }
-//            }
+                for (Consignor consignor : consignorArrayList) {
+                    if (consignor.name.equalsIgnoreCase(nameInput)) {
+                        // If name entered matches an existing entry in consignor database
+                        // Display warning dialog box
 
-            if (!duplicate) {
-                String email = consignorEmailTextField.getText();
-                String phone = consignorPhoneTextField.getText();
-                RecordStoreController.requestAddConsignor(name, email, phone);
-            }
+                        String[] dialogOptions = {"Continue", "Cancel"};
+                        int n = JOptionPane.showOptionDialog(null,
+                                "That name is already in our consignor database, \nwith the following contact info: \n" + consignor.getDetails() +
+                                        "\nWould you like to continue to add a new \nconsignor account, or cancel and edit the existing account?",
+                                "Posible Duplicate",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE,
+                                null,
+                                dialogOptions,
+                                dialogOptions[1]);
+
+                        if (n == 1) {
+                            duplicate = true;
+                        }
+                    }
+                }
+
+                if (!duplicate) {
+                    String email = consignorEmailTextField.getText();
+                    String phone = consignorPhoneTextField.getText();
+                    RecordStoreController.requestAddConsignor(nameInput, email, phone);
+                    refreshConsignorList();
+                }
             }
         });
+
+        editSelectedConsignorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        deleteSelectedConsignorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Consignor consignorToRemove = (Consignor) consignorNamesComboBox.getSelectedItem();
+                RecordStoreController.requestRemoveConsignor(consignorToRemove);
+                refreshConsignorList();
+            }
+        });
+
+        returnSelectedAlbumToButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!consignorsAlbumsJList.isSelectionEmpty()) {
+                    String selectedAlbumInfo = consignorsAlbumsJList.getSelectedValue();
+                    String[] splitAlbumInfo = selectedAlbumInfo.split(".");
+                    int selectedAlbumId = Integer.parseInt(splitAlbumInfo[0]);
+                    RecordStoreController.requestUpdateAlbumStatus(selectedAlbumId, Album.RETURNED_TO_CONSIGNOR);
+                }
+            }
+        });
+    }
+
+    private void refreshConsignorList() {
+        // Populate comboBox model
+        consignorArrayList = RecordStoreController.requestConsignors();
+        consignorComboBoxModel.removeAllElements();
+        Consignor nullValueObject = new Consignor("none selected", "", "", -1);
+        consignorComboBoxModel.addElement(nullValueObject);
+
+        for (Consignor consignor : consignorArrayList) {
+            consignorComboBoxModel.addElement(consignor);
+        }
+    }
+
+    private void getConsignorAlbumDetails(int consignorId) {
+        // Populate JList model
+        consignorAlbumListModel.removeAllElements();
+        ArrayList<Album> consignorsAlbums = RecordStoreController.requestAllConsignorsAlbums(consignorId);
+
+        for (Album album : consignorsAlbums) {
+            consignorAlbumListModel.addElement(album.getDetailsForConsignor());
+        }
     }
 
     public JPanel getPanel() {
