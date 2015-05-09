@@ -31,9 +31,11 @@
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
+          <horizontalScrollBarPolicy value="31"/>
           <maximumSize width="200" height="32767"/>
           <minimumSize width="200" height="20"/>
           <preferredSize width="200" height="128"/>
+          <verticalScrollBarPolicy value="22"/>
         </properties>
         <border type="none"/>
         <children>

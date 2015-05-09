@@ -77,4 +77,8 @@ public class RecordStoreController {
 
         return DataModel.findAlbumsFromConsignor(consignorId);
     }
+
+    public static int requestAlbumStatus(int albumId) {
+        return DataModel.getAlbumStatus(albumId);
+    }
 }

@@ -23,6 +23,7 @@ public class SellGUI extends JPanel {
     private JComboBox<String> searchByCombobox;
     private JTextField searchTextField;
     private JButton searchButton;
+    private JTextArea searchStoreInventoryByTextArea;
 
     DefaultListModel<Album> searchResultsListModel = new DefaultListModel<Album>();
 

@@ -18,6 +18,7 @@ public class InventoryGUI extends JPanel {
     private JTextArea albumAgingTextArea;
     private JPanel inventoryPanel;
     private JScrollPane inventoryScrollpane;
+    private JTextArea searchStoreInventoryForTextArea;
 
     DefaultListModel<Album> albumAgingListModel = new DefaultListModel<Album>();
     ArrayList<Album> albumAgingArrayList = new ArrayList<Album>();

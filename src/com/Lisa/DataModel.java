@@ -28,9 +28,9 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-        createTableSQL();
-        createTestConsignorDataSQL();
-        createTestAlbumDataSQL();
+//        createTableSQL();
+//        createTestConsignorDataSQL();
+//        createTestAlbumDataSQL();
     }
 
     protected void createTableSQL() {
@@ -273,7 +273,8 @@ public class DataModel {
                 String consignorEmail = consignorRS.getString("email");
                 String consignorPhone = consignorRS.getString("phone");
                 int id = consignorRS.getInt("consignorId");
-                Consignor newConsignor = new Consignor(consignorName, consignorEmail, consignorPhone, id);
+                float amountOwed = consignorRS.getFloat("amount_owed");
+                Consignor newConsignor = new Consignor(id, consignorName, consignorEmail, consignorPhone, amountOwed);
                 consignorList.add(newConsignor);
             }
 
@@ -313,6 +314,7 @@ public class DataModel {
 
     public static ArrayList<Album> searchInventoryForAlbums(String searchString, int fieldToSearch) {
         // Return ResultSet of albums with matching title or artist
+        // TODO Ignore case
 
         String searchSql = "";
         ArrayList<Album> searchResults = new ArrayList<Album>();
@@ -407,7 +409,6 @@ public class DataModel {
         updateAlbumStatus(albumId, newStatus, null);
     }
 
-
     public static void updateAlbumStatus(int albumId, int newStatus, java.sql.Date dateSold) {
 
         try {
@@ -499,7 +500,7 @@ public class DataModel {
     public static ArrayList<Album> findAlbumsFromConsignor(int consignorId) {
 
         ArrayList<Album> albumsFromConsignor = new ArrayList<Album>();
-        String consignorAlbumsSql = "SELECT * FROM albums WHERE consignorId = ? ORDER BY date_consigned DESC";
+        String consignorAlbumsSql = "SELECT * FROM albums WHERE consignorId = ? ORDER BY status ASC, date_consigned DESC";
 
         try {
             PreparedStatement psConsignorAlbums = connection.prepareStatement(consignorAlbumsSql);
@@ -514,6 +515,26 @@ public class DataModel {
         }
 
         return albumsFromConsignor;
+    }
+
+    public static int getAlbumStatus(int albumId) {
+        int albumStatus = 0;
+        String albumStatusSql = "SELECT status FROM albums WHERE albumId = ?";
+
+        try {
+            PreparedStatement psAlbumStatus = connection.prepareStatement(albumStatusSql);
+            allStatements.add(psAlbumStatus);
+            psAlbumStatus.setInt(1, albumId);
+            resultSet = psAlbumStatus.executeQuery();
+            albumStatus = resultSetToStatusInt(resultSet);
+
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not find album.");
+            System.out.println(sqle);
+        }
+
+        return albumStatus;
     }
 
     private static ArrayList<Album> resultSetToArrayList(ResultSet resultSet) {
@@ -541,6 +562,22 @@ public class DataModel {
         }
 
         return arraylist;
+    }
+
+    private static int resultSetToStatusInt(ResultSet resultSet) {
+        int status = 0;
+
+        try {
+            while (resultSet.next()) {
+                status = resultSet.getInt("status");
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not get album status.");
+            System.out.println(sqle);
+        }
+
+        return status;
     }
 
     public static void closeDbConnections() {

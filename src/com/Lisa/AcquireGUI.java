@@ -140,6 +140,7 @@ public class AcquireGUI extends JPanel {
                 }
 
                 // TODO: Input validation
+                // TODO change to spinner instead of text field
                 float price = Float.parseFloat(priceTextField.getText());
 
                 // TODO: Null values allowed? Or are all fields required?

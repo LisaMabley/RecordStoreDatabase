@@ -11,11 +11,16 @@ public class Consignor {
     protected String phoneNumber;
     protected float amountOwed;
 
-    public Consignor(String name, String phone, String email, int id) {
+    public Consignor(int id, String name, String phone, String email, Float amountOwed) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phone;
         this.consignorId = id;
+        if (amountOwed == null) {
+            this.amountOwed = 0;
+        } else {
+            this.amountOwed = amountOwed;
+        }
     }
 
     public int getId() {

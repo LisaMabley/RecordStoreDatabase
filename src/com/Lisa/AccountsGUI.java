@@ -52,6 +52,7 @@ public class AccountsGUI extends JPanel {
                     consignorEmailTextField.setText(selectedConsignor.email);
                     consignorPhoneTextField.setText(selectedConsignor.phoneNumber);
                     getConsignorAlbumDetails(selectedConsignor.consignorId);
+                    amountOwedLabel.setText("Amount owed: $" + selectedConsignor.amountOwed);
 
                 } else {
                     // No consignor selected
@@ -121,19 +122,25 @@ public class AccountsGUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (!consignorsAlbumsJList.isSelectionEmpty()) {
                     String selectedAlbumInfo = consignorsAlbumsJList.getSelectedValue();
-                    String[] splitAlbumInfo = selectedAlbumInfo.split(".");
+                    String[] splitAlbumInfo = selectedAlbumInfo.split("\\.");
                     int selectedAlbumId = Integer.parseInt(splitAlbumInfo[0]);
-                    RecordStoreController.requestUpdateAlbumStatus(selectedAlbumId, Album.RETURNED_TO_CONSIGNOR);
+                    int selectedAlbumStatus = RecordStoreController.requestAlbumStatus(selectedAlbumId);
+                    if (selectedAlbumStatus == Album.STORE || selectedAlbumStatus == Album.BARGAIN_BIN) {
+                        RecordStoreController.requestUpdateAlbumStatus(selectedAlbumId, Album.RETURNED_TO_CONSIGNOR);
+                    }
                 }
             }
         });
+
+        // TODO implement edit consignor info button functionality
+        // TODO Display payments in JList
     }
 
     private void refreshConsignorList() {
         // Populate comboBox model
         consignorArrayList = RecordStoreController.requestConsignors();
         consignorComboBoxModel.removeAllElements();
-        Consignor nullValueObject = new Consignor("none selected", "", "", -1);
+        Consignor nullValueObject = new Consignor(-1, "none selected", "", "", (float)0.0);
         consignorComboBoxModel.addElement(nullValueObject);
 
         for (Consignor consignor : consignorArrayList) {
@@ -142,6 +149,8 @@ public class AccountsGUI extends JPanel {
     }
 
     private void getConsignorAlbumDetails(int consignorId) {
+        // TODO figure out why the scrollpane does not scroll vertically to display all results
+
         // Populate JList model
         consignorAlbumListModel.removeAllElements();
         ArrayList<Album> consignorsAlbums = RecordStoreController.requestAllConsignorsAlbums(consignorId);
