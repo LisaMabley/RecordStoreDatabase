@@ -199,6 +199,7 @@
               <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <enabled value="false"/>
               <text value="Update Consignor Info"/>
             </properties>
           </component>
@@ -234,13 +235,13 @@
           </vspacer>
           <component id="e5475" class="javax.swing.JButton" binding="returnSelectedAlbumToButton" default-binding="true">
             <constraints>
-              <grid row="1" column="3" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="3" row-span="2" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <maximumSize width="270" height="29"/>
-              <minimumSize width="230" height="29"/>
-              <preferredSize width="270" height="29"/>
+              <maximumSize width="300" height="29"/>
+              <minimumSize width="300" height="29"/>
+              <preferredSize width="300" height="29"/>
               <text value="Return Selected Album to Consignor"/>
               <visible value="true"/>
             </properties>

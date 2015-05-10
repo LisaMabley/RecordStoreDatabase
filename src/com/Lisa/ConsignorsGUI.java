@@ -8,13 +8,24 @@ import javax.swing.*;
 public class ConsignorsGUI extends JPanel {
 
     private JPanel consignorsPanel;
-    private JButton findConsignorsButton;
-    private JTextArea textArea1;
-    private JList list1;
-    private JComboBox comboBox1;
     private JButton payOtherAmountButton;
     private JButton payInFullButton;
-    private JSpinner spinner1;
+    private JList consignorJList;
+    private JSpinner payAmountSpinner;
+    private JTextArea consignorAlbumsTextArea;
+    private JTextArea textArea1;
+    private JComboBox searchPurposeComboBox;
+
+    // Constructor
+    public ConsignorsGUI() {
+
+        // Set options for purpose
+        final String[] purposeOptions = {"Find Consignors Owed More Than $10", "Find Consignors with Unsold Albums"};
+
+        searchPurposeComboBox.addItem(purposeOptions[0]);
+        searchPurposeComboBox.addItem(purposeOptions[1]);
+        searchPurposeComboBox.setSelectedItem(purposeOptions[0]);
+    }
 
     public JPanel getPanel() {
         return consignorsPanel;

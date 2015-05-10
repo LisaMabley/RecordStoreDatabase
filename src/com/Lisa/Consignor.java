@@ -11,6 +11,10 @@ public class Consignor {
     protected String phoneNumber;
     protected float amountOwed;
 
+    protected static final int FINDGROUP_ALL_CONSIGNORS = 1;
+    protected static final int FINDGROUP_UNSOLD_ALBUMS = 2;
+    protected static final int FINDGROUP_OWED_TEN = 3;
+
     public Consignor(int id, String name, String phone, String email, Float amountOwed) {
         this.name = name;
         this.email = email;

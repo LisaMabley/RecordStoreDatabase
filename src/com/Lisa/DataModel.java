@@ -261,10 +261,23 @@ public class DataModel {
         }
     }
 
-    public static ArrayList<Consignor> getConsignors() {
+    public static ArrayList<Consignor> getConsignors(int findGroup) {
         ArrayList<Consignor> consignorList = new ArrayList<Consignor>();
         String getConsignorsAction = "Get consignors";
-        String getConsignorsSql = "SELECT * FROM consignors";
+        String getConsignorsSql = "";
+
+        switch (findGroup) {
+            case 1:
+                getConsignorsSql = "SELECT * FROM consignors ORDER BY name ASC";
+                break;
+            case 2:
+                // TODO Do I need "DISTINCT"?
+                getConsignorsSql = "SELECT * FROM consignors" +
+                        "INNER JOIN albums ON consignors.consignorId = albums.consignorId WHERE albums.status = 1 AND " +
+                        "albums.date_consigned < ? ORDER BY consignors.name";
+//                java.sql.Date AlbumsConsignedBeforeDate = Album.albumsConsignedBeforeThisDateGoToBargainBinToday();
+                break;
+        }
 
         try {
             ResultSet consignorRS = executeSqlQuery(getConsignorsSql, getConsignorsAction);
@@ -288,7 +301,7 @@ public class DataModel {
 
     public static int getNumCopiesInInventory(String artist, String title, int status) {
         // Returns number of copies in store
-        // TODO restrict SOLD and DONATED status to past 60 days
+        // TODO restrict STATUS_SOLD and STATUS_DONATED status to past 60 days
 
         int copiesInStore = 0;
 
@@ -335,7 +348,7 @@ public class DataModel {
             String searchStringPlusPercentSigns = "%" + searchString + "%";
             psSearch.setString(1, searchStringPlusPercentSigns);
             resultSet = psSearch.executeQuery();
-            searchResults = resultSetToArrayList(resultSet);
+            searchResults = resultSetToAlbumArrayList(resultSet);
 
         } catch (SQLException sqle) {
             System.out.println("Could not execute search.");
@@ -405,37 +418,37 @@ public class DataModel {
         }
     }
 
-    public static void updateAlbumStatus(int albumId, int newStatus) {
-        updateAlbumStatus(albumId, newStatus, null);
-    }
+//    public static void updateAlbumStatus(Album albumToUpdate, int newStatus) {
+//        updateAlbumStatus(albumToUpdate, newStatus, null);
+//    }
 
-    public static void updateAlbumStatus(int albumId, int newStatus, java.sql.Date dateSold) {
+    public static void updateAlbumStatus(Album albumToUpdate, int newStatus, java.sql.Date dateSold) {
 
         try {
             String updateStatusSql = "";
 
-            if (newStatus == Album.SOLD) {
+            if (newStatus == Album.STATUS_SOLD) {
                 updateStatusSql = "UPDATE albums SET status = ?, date_sold = ? WHERE albumId = ?";
 
-            }  else if (newStatus == Album.BARGAIN_BIN) {
+            }  else if (newStatus == Album.STATUS_BARGAIN_BIN) {
                 updateStatusSql = "UPDATE albums SET status = ?, price = 1 WHERE albumId = ?";
             }
 
-            else if (newStatus == Album.DONATED || newStatus == Album.RETURNED_TO_CONSIGNOR){
+            else if (newStatus == Album.STATUS_DONATED || newStatus == Album.STATUS_RETURNED_TO_CONSIGNOR){
                 updateStatusSql = "UPDATE albums SET status = ?, price = 0 WHERE albumId = ?";
             }
 
             PreparedStatement psUdateAlbumStatus = connection.prepareStatement(updateStatusSql);
             allStatements.add(psUdateAlbumStatus);
 
-            if (newStatus == Album.SOLD) {
+            if (newStatus == Album.STATUS_SOLD) {
                 psUdateAlbumStatus.setInt(1, newStatus);
                 psUdateAlbumStatus.setDate(2, dateSold);
-                psUdateAlbumStatus.setInt(3, albumId);
+                psUdateAlbumStatus.setInt(3, albumToUpdate.albumId);
 
             } else {
                 psUdateAlbumStatus.setInt(1, newStatus);
-                psUdateAlbumStatus.setInt(2, albumId);
+                psUdateAlbumStatus.setInt(2, albumToUpdate.albumId);
             }
 
             executeSqlUpdate(psUdateAlbumStatus, "Update album status");
@@ -472,10 +485,10 @@ public class DataModel {
         ArrayList<Album> albumsConsignedBeforeDate = new ArrayList<Album>();
         String agingSql = "";
 
-        if (status == Album.STORE) {
+        if (status == Album.STATUS_STORE) {
             agingSql = "SELECT * FROM albums WHERE status = 1 AND date_consigned < ?";
 
-        } else if (status == Album.BARGAIN_BIN) {
+        } else if (status == Album.STATUS_BARGAIN_BIN) {
             agingSql = "SELECT * FROM albums WHERE status = 2 AND date_consigned < ?";
 
         } else {
@@ -487,7 +500,7 @@ public class DataModel {
             allStatements.add(psAging);
             psAging.setDate(1, consignedBefore);
             resultSet = psAging.executeQuery();
-            albumsConsignedBeforeDate = resultSetToArrayList(resultSet);
+            albumsConsignedBeforeDate = resultSetToAlbumArrayList(resultSet);
 
         } catch (SQLException sqle) {
             System.out.println("Could not execute search.");
@@ -497,7 +510,7 @@ public class DataModel {
         return albumsConsignedBeforeDate;
     }
 
-    public static ArrayList<Album> findAlbumsFromConsignor(int consignorId) {
+    public static ArrayList<ConsignorAlbum> findAlbumsFromConsignor(int consignorId) {
 
         ArrayList<Album> albumsFromConsignor = new ArrayList<Album>();
         String consignorAlbumsSql = "SELECT * FROM albums WHERE consignorId = ? ORDER BY status ASC, date_consigned DESC";
@@ -507,37 +520,43 @@ public class DataModel {
             allStatements.add(psConsignorAlbums);
             psConsignorAlbums.setInt(1, consignorId);
             resultSet = psConsignorAlbums.executeQuery();
-            albumsFromConsignor = resultSetToArrayList(resultSet);
+            albumsFromConsignor = resultSetToAlbumArrayList(resultSet);
 
         } catch (SQLException sqle) {
             System.out.println("Could not execute search.");
             System.out.println(sqle);
         }
 
-        return albumsFromConsignor;
-    }
-
-    public static int getAlbumStatus(int albumId) {
-        int albumStatus = 0;
-        String albumStatusSql = "SELECT status FROM albums WHERE albumId = ?";
-
-        try {
-            PreparedStatement psAlbumStatus = connection.prepareStatement(albumStatusSql);
-            allStatements.add(psAlbumStatus);
-            psAlbumStatus.setInt(1, albumId);
-            resultSet = psAlbumStatus.executeQuery();
-            albumStatus = resultSetToStatusInt(resultSet);
-
-
-        } catch (SQLException sqle) {
-            System.out.println("Could not find album.");
-            System.out.println(sqle);
+        ArrayList<ConsignorAlbum> consignorAlbums = new ArrayList<ConsignorAlbum>();
+        for (Album album : albumsFromConsignor) {
+            ConsignorAlbum newConsignorAlbum = new ConsignorAlbum(album);
+            consignorAlbums.add(newConsignorAlbum);
         }
 
-        return albumStatus;
+        return consignorAlbums;
     }
 
-    private static ArrayList<Album> resultSetToArrayList(ResultSet resultSet) {
+//    public static int getAlbumStatus(int albumId) {
+//        int albumStatus = 0;
+//        String albumStatusSql = "SELECT status FROM albums WHERE albumId = ?";
+//
+//        try {
+//            PreparedStatement psAlbumStatus = connection.prepareStatement(albumStatusSql);
+//            allStatements.add(psAlbumStatus);
+//            psAlbumStatus.setInt(1, albumId);
+//            resultSet = psAlbumStatus.executeQuery();
+//            albumStatus = resultSetToStatusInt(resultSet);
+//
+//
+//        } catch (SQLException sqle) {
+//            System.out.println("Could not find album.");
+//            System.out.println(sqle);
+//        }
+//
+//        return albumStatus;
+//    }
+
+    private static ArrayList<Album> resultSetToAlbumArrayList(ResultSet resultSet) {
         ArrayList<Album> arraylist = new ArrayList<Album>();
 
         try {
@@ -564,21 +583,21 @@ public class DataModel {
         return arraylist;
     }
 
-    private static int resultSetToStatusInt(ResultSet resultSet) {
-        int status = 0;
-
-        try {
-            while (resultSet.next()) {
-                status = resultSet.getInt("status");
-            }
-
-        } catch (SQLException sqle) {
-            System.out.println("Could not get album status.");
-            System.out.println(sqle);
-        }
-
-        return status;
-    }
+//    private static int resultSetToStatusInt(ResultSet resultSet) {
+//        int status = 0;
+//
+//        try {
+//            while (resultSet.next()) {
+//                status = resultSet.getInt("status");
+//            }
+//
+//        } catch (SQLException sqle) {
+//            System.out.println("Could not get album status.");
+//            System.out.println(sqle);
+//        }
+//
+//        return status;
+//    }
 
     public static void closeDbConnections() {
 

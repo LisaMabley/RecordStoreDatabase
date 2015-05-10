@@ -1,6 +1,5 @@
 package com.Lisa;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +15,7 @@ public class RecordStoreController {
     }
 
     public static ArrayList<Consignor> requestConsignors() {
-        return DataModel.getConsignors();
+        return DataModel.getConsignors(1);
     }
 
     public static int requestInventoryCheck(String artist, String title, int status) {
@@ -39,15 +38,15 @@ public class RecordStoreController {
         DataModel.removeConsignor(consignorToRemove);
     }
 
-    public static void requestUpdateAlbumStatus(int albumId, int newStatus) {
-        DataModel.updateAlbumStatus(albumId, newStatus);
-    }
+//    public static void requestUpdateAlbumStatus(int albumId, int newStatus) {
+//        DataModel.updateAlbumStatus(albumId, newStatus);
+//    }
 
     public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {
-        if (newStatus == Album.SOLD) {
+        if (newStatus == Album.STATUS_SOLD) {
             albumToUpdate.setSoldDate();
         }
-        DataModel.updateAlbumStatus(albumToUpdate.albumId, newStatus, albumToUpdate.dateSold);
+        DataModel.updateAlbumStatus(albumToUpdate, newStatus, albumToUpdate.dateSold);
     }
 
 //    public static void requestUpdateAlbumPrice(Album albumToUpdate, int newPrice) {
@@ -62,10 +61,10 @@ public class RecordStoreController {
         Calendar calendar = Calendar.getInstance();
         if (ageToFind == InventoryGUI.THIRTY_SEVEN_DAYS) {
             calendar.add(Calendar.DAY_OF_MONTH, -37);
-            findAlbumsOfStatus = Album.STORE;
+            findAlbumsOfStatus = Album.STATUS_STORE;
         } else if (ageToFind == InventoryGUI.THIRTEEN_MONTHS) {
             calendar.add(Calendar.YEAR, -1);
-            findAlbumsOfStatus = Album.BARGAIN_BIN;
+            findAlbumsOfStatus = Album.STATUS_BARGAIN_BIN;
         }
         Date utilDate = calendar.getTime();
         java.sql.Date findAlbumsConsignedBefore = new java.sql.Date(utilDate.getTime());
@@ -73,12 +72,11 @@ public class RecordStoreController {
         return DataModel.findAlbumsOfAge(findAlbumsConsignedBefore, findAlbumsOfStatus);
     }
 
-    public static ArrayList<Album> requestAllConsignorsAlbums(int consignorId) {
-
+    public static ArrayList<ConsignorAlbum> requestAllConsignorsAlbums(int consignorId) {
         return DataModel.findAlbumsFromConsignor(consignorId);
     }
 
-    public static int requestAlbumStatus(int albumId) {
-        return DataModel.getAlbumStatus(albumId);
-    }
+//    public static int requestAlbumStatus(int albumId) {
+//        return DataModel.getAlbumStatus(albumId);
+//    }
 }

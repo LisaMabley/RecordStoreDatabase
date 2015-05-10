@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AccountsGUI extends JPanel {
     private JPanel accountPanel;
-    private JList<String> consignorsAlbumsJList;
+    private JList<ConsignorAlbum> consignorsAlbumsJList;
     private JLabel amountOwedLabel;
     private JTextField consignorNameTextField;
     private JTextField consignorEmailTextField;
@@ -18,7 +18,6 @@ public class AccountsGUI extends JPanel {
     private JButton addNewConsignorButton;
     private JButton editSelectedConsignorButton;
     private JComboBox<Consignor> consignorNamesComboBox;
-    private JComboBox<String> albumStatusComboBox;
     private JButton deleteSelectedConsignorButton;
     private JTextArea addEditAndDeleteTextArea;
     private JList<Payment> paymentsJList;
@@ -26,7 +25,7 @@ public class AccountsGUI extends JPanel {
 
     protected static ArrayList<Consignor> consignorArrayList = new ArrayList<Consignor>();
     protected static DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
-    private static DefaultListModel<String> consignorAlbumListModel = new DefaultListModel<String>();
+    private static DefaultListModel<ConsignorAlbum> consignorAlbumListModel = new DefaultListModel<ConsignorAlbum>();
 
     // Constructor
     public AccountsGUI() {
@@ -77,7 +76,7 @@ public class AccountsGUI extends JPanel {
 
                         String[] dialogOptions = {"Continue", "Cancel"};
                         int n = JOptionPane.showOptionDialog(null,
-                                "That name is already in our consignor database, \nwith the following contact info: \n" + consignor.getDetails() +
+                                "That name is already in our consignor database, \nwith the following contact info: \n" + consignor +
                                         "\nWould you like to continue to add a new \nconsignor account, or cancel and edit the existing account?",
                                 "Posible Duplicate",
                                 JOptionPane.YES_NO_OPTION,
@@ -121,12 +120,10 @@ public class AccountsGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!consignorsAlbumsJList.isSelectionEmpty()) {
-                    String selectedAlbumInfo = consignorsAlbumsJList.getSelectedValue();
-                    String[] splitAlbumInfo = selectedAlbumInfo.split("\\.");
-                    int selectedAlbumId = Integer.parseInt(splitAlbumInfo[0]);
-                    int selectedAlbumStatus = RecordStoreController.requestAlbumStatus(selectedAlbumId);
-                    if (selectedAlbumStatus == Album.STORE || selectedAlbumStatus == Album.BARGAIN_BIN) {
-                        RecordStoreController.requestUpdateAlbumStatus(selectedAlbumId, Album.RETURNED_TO_CONSIGNOR);
+
+                    Album selectedAlbum = consignorsAlbumsJList.getSelectedValue();
+                    if (selectedAlbum.status == Album.STATUS_STORE || selectedAlbum.status == Album.STATUS_BARGAIN_BIN) {
+                        RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.STATUS_RETURNED_TO_CONSIGNOR);
                     }
                 }
             }
@@ -153,10 +150,10 @@ public class AccountsGUI extends JPanel {
 
         // Populate JList model
         consignorAlbumListModel.removeAllElements();
-        ArrayList<Album> consignorsAlbums = RecordStoreController.requestAllConsignorsAlbums(consignorId);
+        ArrayList<ConsignorAlbum> consignorsAlbums = RecordStoreController.requestAllConsignorsAlbums(consignorId);
 
-        for (Album album : consignorsAlbums) {
-            consignorAlbumListModel.addElement(album.getDetailsForConsignor());
+        for (ConsignorAlbum album : consignorsAlbums) {
+            consignorAlbumListModel.addElement(album);
         }
     }
 

@@ -19,6 +19,7 @@ public class InventoryGUI extends JPanel {
     private JPanel inventoryPanel;
     private JScrollPane inventoryScrollpane;
     private JTextArea searchStoreInventoryForTextArea;
+    private JTextArea searchBargainBinForTextArea;
 
     DefaultListModel<Album> albumAgingListModel = new DefaultListModel<Album>();
     ArrayList<Album> albumAgingArrayList = new ArrayList<Album>();
@@ -78,15 +79,15 @@ public class InventoryGUI extends JPanel {
                 Album selectedAlbum = (Album) albumAgingJList.getSelectedValue();
                 albumAgingListModel.removeElement(selectedAlbum);
 
-                if (selectedAlbum.status == Album.STORE) {
-                    RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.BARGAIN_BIN);
+                if (selectedAlbum.status == Album.STATUS_STORE) {
+                    RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.STATUS_BARGAIN_BIN);
 //                    RecordStoreController.requestUpdateAlbumPrice(selectedAlbum, 1);
-                    selectedAlbum.moveToBargainBin();
+//                    selectedAlbum.moveToBargainBin();
 
-                } else if (selectedAlbum.status == Album.BARGAIN_BIN) {
-                    RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.DONATED);
+                } else if (selectedAlbum.status == Album.STATUS_BARGAIN_BIN) {
+                    RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.STATUS_DONATED);
 //                    RecordStoreController.requestUpdateAlbumPrice(selectedAlbum, 0);
-                    selectedAlbum.setDonated();
+//                    selectedAlbum.setDonated();
                 }
             }
         });
@@ -97,16 +98,16 @@ public class InventoryGUI extends JPanel {
 
                 if (albumAgingTextArea.getText().contains("bargain bin")) {
                     for (Album album : albumAgingArrayList) {
-                        album.moveToBargainBin();
-                        RecordStoreController.requestUpdateAlbumStatus(album, Album.BARGAIN_BIN);
+//                        album.moveToBargainBin();
+                        RecordStoreController.requestUpdateAlbumStatus(album, Album.STATUS_BARGAIN_BIN);
 //                        RecordStoreController.requestUpdateAlbumPrice(album, 1);
                         albumAgingListModel.removeElement(album);
                     }
 
                 } else if (albumAgingTextArea.getText().contains("donate")) {
                     for (Album album : albumAgingArrayList) {
-                        album.setDonated();
-                        RecordStoreController.requestUpdateAlbumStatus(album, Album.DONATED);
+//                        album.setDonated();
+                        RecordStoreController.requestUpdateAlbumStatus(album, Album.STATUS_DONATED);
 //                        RecordStoreController.requestUpdateAlbumPrice(album, 0);
                         albumAgingListModel.removeElement(album);
                     }

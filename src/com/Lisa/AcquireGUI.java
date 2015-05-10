@@ -66,19 +66,19 @@ public class AcquireGUI extends JPanel {
                 String title = titleTextField.getText();
 
                 StringBuilder stringBuilder = new StringBuilder();
-                int numStoreCopies = RecordStoreController.requestInventoryCheck(name, title, Album.STORE);
+                int numStoreCopies = RecordStoreController.requestInventoryCheck(name, title, Album.STATUS_STORE);
                 String inventorySearchResultString = "Copies in store: " + numStoreCopies + "\n";
                 stringBuilder.append(inventorySearchResultString);
 
-                int numBargainCopies = RecordStoreController.requestInventoryCheck(name, title, Album.BARGAIN_BIN);
+                int numBargainCopies = RecordStoreController.requestInventoryCheck(name, title, Album.STATUS_BARGAIN_BIN);
                 String bargainSearchResultString = "Copies in bargain bin: " + numBargainCopies + "\n";
                 stringBuilder.append(bargainSearchResultString);
 
-                int numSoldCopies = RecordStoreController.requestInventoryCheck(name, title, Album.SOLD);
+                int numSoldCopies = RecordStoreController.requestInventoryCheck(name, title, Album.STATUS_SOLD);
                 String soldCopiesSearchResultString = "Copies sold in past 60 days: " + numSoldCopies + "\n";
                 stringBuilder.append(soldCopiesSearchResultString);
 
-                int numDonatedCopies = RecordStoreController.requestInventoryCheck(name, title, Album.DONATED);
+                int numDonatedCopies = RecordStoreController.requestInventoryCheck(name, title, Album.STATUS_DONATED);
                 String donatedCopiesSearchResultString = "Copies donated in past 60 days: " + numDonatedCopies + "\n";
                 stringBuilder.append(donatedCopiesSearchResultString);
 
@@ -107,36 +107,36 @@ public class AcquireGUI extends JPanel {
                 int size;
                 String sizeString = sizeCombobox.getSelectedItem().toString();
                 if (sizeString.equalsIgnoreCase(seven)) {
-                    size = Album.SEVEN_INCH;
+                    size = Album.SIZE_SEVEN_INCH;
                 } else if (sizeString.equalsIgnoreCase(ten)) {
-                    size = Album.TEN_INCH;
+                    size = Album.SIZE_TEN_INCH;
                 } else if (sizeString.equalsIgnoreCase(twelve)) {
-                    size = Album.TWELVE_INCH;
+                    size = Album.SIZE_TWELVE_INCH;
                 } else if (sizeString.equalsIgnoreCase(lp)) {
-                    size = Album.LP;
+                    size = Album.SIZE_LP;
                 } else if (sizeString.equalsIgnoreCase(lpSet)) {
-                    size = Album.TWO_LP_SET;
+                    size = Album.SIZE_TWO_LP_SET;
                 } else if (sizeString.equalsIgnoreCase(boxSet)) {
-                    size = Album.BOX_SET;
+                    size = Album.SIZE_BOX_SET;
                 } else {
-                    size = Album.LP;
+                    size = Album.SIZE_LP;
                 }
 
                 int condition;
                 if (sizeString.equalsIgnoreCase(poor)) {
-                    condition = Album.POOR;
+                    condition = Album.CONDITION_POOR;
                 } else if (sizeString.equalsIgnoreCase(fair)) {
-                    condition = Album.FAIR;
+                    condition = Album.CONDITION_FAIR;
                 } else if (sizeString.equalsIgnoreCase(good)) {
-                    condition = Album.GOOD;
+                    condition = Album.CONDITION_GOOD;
                 } else if (sizeString.equalsIgnoreCase(veryGood)) {
-                    condition = Album.VERY_GOOD;
+                    condition = Album.CONDITION_VERY_GOOD;
                 } else if (sizeString.equalsIgnoreCase(nearMint)) {
-                    condition = Album.NEAR_MINT;
+                    condition = Album.CONDITION_NEAR_MINT;
                 } else if (sizeString.equalsIgnoreCase(mint)) {
-                    condition = Album.MINT;
+                    condition = Album.CONDITION_MINT;
                 } else {
-                    condition = Album.GOOD;
+                    condition = Album.CONDITION_GOOD;
                 }
 
                 // TODO: Input validation

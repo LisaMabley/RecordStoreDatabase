@@ -68,7 +68,7 @@ public class SellGUI extends JPanel {
             public void valueChanged(ListSelectionEvent e) {
                 if (!albumSearchResultsJList.isSelectionEmpty()) {
                     Album selectedAlbum = albumSearchResultsJList.getSelectedValue();
-                    searchResultTextArea.setText(selectedAlbum.getDetailsForBuyers());
+                    searchResultTextArea.setText(selectedAlbum.getAlbumDetailsForBuyers());
                 }
             }
         });
@@ -94,11 +94,12 @@ public class SellGUI extends JPanel {
                 // TODO do nothing if no album is selected
                 searchResultTextArea.setText("");
                 Album selectedAlbum = albumSearchResultsJList.getSelectedValue();
-                RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.SOLD);
+                RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.STATUS_SOLD);
                 searchResultsListModel.removeElement(selectedAlbum);
             }
         });
 
+        // TODO Add quit button to all screens instead of just this one
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
