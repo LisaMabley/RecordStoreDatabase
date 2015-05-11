@@ -22,6 +22,7 @@ public class TabsGUI extends JFrame {
         tabbedPane.add("Consignor Accounts", new AccountsGUI().getPanel());
         tabbedPane.add("Manage Consignors", new ConsignorsGUI().getPanel());
         tabbedPane.add("Manage Inventory", new InventoryGUI().getPanel());
+        // TODO reset forms on each page when tabbed away from
 
         setSize(new Dimension(750, 500));
         setVisible(true);

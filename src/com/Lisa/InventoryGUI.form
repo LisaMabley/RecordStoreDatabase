@@ -40,14 +40,19 @@
           <maximumSize width="280" height="280"/>
           <minimumSize width="280" height="100"/>
           <preferredSize width="280" height="128"/>
-          <verticalScrollBarPolicy value="22"/>
+          <verticalScrollBarPolicy value="20"/>
           <visible value="true"/>
         </properties>
         <border type="none"/>
         <children>
           <component id="5de78" class="javax.swing.JList" binding="albumAgingJList">
             <constraints/>
-            <properties/>
+            <properties>
+              <selectionMode value="0"/>
+              <valueIsAdjusting value="true"/>
+              <verifyInputWhenFocusTarget value="false"/>
+              <visibleRowCount value="8"/>
+            </properties>
           </component>
         </children>
       </scrollpane>

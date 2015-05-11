@@ -59,7 +59,9 @@
             <children>
               <component id="bc974" class="javax.swing.JList" binding="albumSearchResultsJList">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <visible value="true"/>
+                </properties>
               </component>
             </children>
           </scrollpane>

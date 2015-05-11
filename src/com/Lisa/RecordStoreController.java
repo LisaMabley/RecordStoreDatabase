@@ -81,7 +81,7 @@ public class RecordStoreController {
     }
 
     public static ArrayList<ConsignorAlbum> requestAllConsignorsAlbums(int consignorId) {
-        return DataModel.findAlbumsFromConsignor(consignorId);
+        return DataModel.findAllAlbumsFromConsignor(consignorId);
     }
 
     public static ArrayList<ConsignorAlbum> requestConsignorsUnsoldAlbums(int consignorId) {

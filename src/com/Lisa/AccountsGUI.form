@@ -30,16 +30,14 @@
               <horizontalScrollBarPolicy value="31"/>
               <minimumSize width="450" height="20"/>
               <preferredSize width="450" height="130"/>
-              <verticalScrollBarPolicy value="22"/>
+              <verticalScrollBarPolicy value="20"/>
             </properties>
             <border type="none"/>
             <children>
               <component id="3c55e" class="javax.swing.JList" binding="consignorsAlbumsJList">
                 <constraints/>
                 <properties>
-                  <maximumSize width="350" height="0"/>
-                  <minimumSize width="350" height="0"/>
-                  <preferredSize width="450" height="100"/>
+                  <selectionMode value="0"/>
                 </properties>
               </component>
             </children>
@@ -90,9 +88,7 @@
             <children>
               <component id="30fe0" class="javax.swing.JList" binding="paymentsJList">
                 <constraints/>
-                <properties>
-                  <preferredSize width="250" height="100"/>
-                </properties>
+                <properties/>
               </component>
             </children>
           </scrollpane>

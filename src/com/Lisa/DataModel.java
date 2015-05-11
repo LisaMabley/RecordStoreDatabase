@@ -348,10 +348,10 @@ public class DataModel {
         ArrayList<Album> searchResults = new ArrayList<Album>();
 
         if (fieldToSearch == SellGUI.ARTIST_FIELD) {
-            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND artist LIKE ?";
+            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND artist LIKE ? ORDER BY artist";
 
         } else if (fieldToSearch == SellGUI.TITLE_FIELD) {
-            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND title LIKE ?";
+            searchSql = "SELECT * FROM albums WHERE (status = 1 OR status = 2) AND title LIKE ? ORDER BY title";
 
         } else {
             return null;
@@ -574,7 +574,7 @@ public class DataModel {
         return albumsConsignedBeforeDate;
     }
 
-    public static ArrayList<ConsignorAlbum> findAlbumsFromConsignor(int consignorId) {
+    public static ArrayList<ConsignorAlbum> findAllAlbumsFromConsignor(int consignorId) {
 
         ArrayList<Album> albumsFromConsignor = new ArrayList<Album>();
         String consignorAlbumsSql = "SELECT * FROM albums WHERE consignorId = ? ORDER BY status ASC, date_consigned DESC";
