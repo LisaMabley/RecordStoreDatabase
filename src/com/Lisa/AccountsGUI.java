@@ -27,6 +27,8 @@ public class AccountsGUI extends JPanel {
     protected static ArrayList<Consignor> consignorArrayList = new ArrayList<Consignor>();
     protected static DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
     private static DefaultListModel<ConsignorAlbum> consignorAlbumListModel = new DefaultListModel<ConsignorAlbum>();
+    private static DefaultListModel<Payment> consignorPaymentListModel = new DefaultListModel<Payment>();
+
 
     // Constructor
     public AccountsGUI() {
@@ -34,6 +36,10 @@ public class AccountsGUI extends JPanel {
         // Create list models for consignor album list
         consignorsAlbumsJList.setModel(consignorAlbumListModel);
         consignorsAlbumsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Create list models for consignor payment list
+        paymentsJList.setModel(consignorPaymentListModel);
+        paymentsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Set model for consignor combobox
         consignorNamesComboBox.setModel(consignorComboBoxModel);
@@ -52,6 +58,8 @@ public class AccountsGUI extends JPanel {
                     consignorEmailTextField.setText(selectedConsignor.email);
                     consignorPhoneTextField.setText(selectedConsignor.phoneNumber);
                     getConsignorAlbumDetails(selectedConsignor.consignorId);
+                    getConsignorPaymentDetails(selectedConsignor.consignorId);
+                    // TODO format number nicely
                     amountOwedLabel.setText("Amount owed: $" + selectedConsignor.amountOwed);
 
                 } else {
@@ -123,12 +131,12 @@ public class AccountsGUI extends JPanel {
                     if (selectedAlbum.status == Album.STATUS_STORE || selectedAlbum.status == Album.STATUS_BARGAIN_BIN) {
                         RecordStoreController.requestUpdateAlbumStatus(selectedAlbum, Album.STATUS_RETURNED_TO_CONSIGNOR);
                     }
+                    consignorAlbumListModel.removeElement(selectedAlbum);
                 }
             }
         });
 
         // TODO implement edit consignor info button functionality
-        // TODO Display payments in JList
     }
 
     private void refreshConsignorList() {
@@ -144,7 +152,6 @@ public class AccountsGUI extends JPanel {
     }
 
     private void getConsignorAlbumDetails(int consignorId) {
-        // TODO figure out why the scrollpane does not scroll vertically to display all results
 
         // Populate JList model
         consignorAlbumListModel.removeAllElements();
@@ -155,11 +162,23 @@ public class AccountsGUI extends JPanel {
         }
     }
 
+    private void getConsignorPaymentDetails(int consignorId) {
+
+        // Populate JList model
+        consignorPaymentListModel.removeAllElements();
+        ArrayList<Payment> consignorsPayments = RecordStoreController.requestAllConsignorsPayments(consignorId);
+
+        for (Payment payment : consignorsPayments) {
+            consignorPaymentListModel.addElement(payment);
+        }
+    }
+
     private void clearFields() {
         consignorNameTextField.setText("");
         consignorEmailTextField.setText("");
         consignorPhoneTextField.setText("");
         consignorAlbumListModel.removeAllElements();
+        consignorPaymentListModel.removeAllElements();
     }
 
     public void reset() {

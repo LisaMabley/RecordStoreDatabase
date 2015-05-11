@@ -88,6 +88,10 @@ public class RecordStoreController {
         return DataModel.findUnsoldAlbumsFromConsignor(consignorId);
     }
 
+    public static ArrayList<Payment> requestAllConsignorsPayments(int consignorId) {
+        return DataModel.findAllPaymentsToConsignor(consignorId);
+    }
+
     public static void requestPayConsignorInFull(Consignor consignorToPay) {
         Payment newPayment = new Payment(consignorToPay.consignorId, consignorToPay.amountOwed);
         DataModel.recordPayment(newPayment);

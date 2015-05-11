@@ -28,9 +28,10 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-        createTableSQL();
-        createTestConsignorDataSQL();
-        createTestAlbumDataSQL();
+//        createTableSQL();
+//        createTestConsignorDataSQL();
+//        createTestAlbumDataSQL();
+//        createTestPaymentDataSQL();
     }
 
     protected void createTableSQL() {
@@ -103,34 +104,6 @@ public class DataModel {
         }
     }
 
-//    protected static ResultSet executeSqlQuery(String sql, String sqlAction) {
-//
-//        try {
-//            resultSet = statement.executeQuery(sql);
-//            System.out.println(sqlAction + " succeeded.");
-//
-//        } catch (SQLException sqlException) {
-//            System.out.println(sqlAction + " failed. Could not execute SQL query.");
-//            System.out.println(sqlException);
-//        }
-//
-//        return resultSet;
-//    }
-
-//    protected static ResultSet executePsQuery(PreparedStatement ps, String sqlAction) {
-//
-//        try {
-//            resultSet = statement.executeQuery(sql);
-//            System.out.println(sqlAction + " succeeded.");
-//
-//        } catch (SQLException sqlException) {
-//            System.out.println(sqlAction + " failed. Could not execute SQL query.");
-//            System.out.println(sqlException);
-//        }
-//
-//        return resultSet;
-//    }
-
     private static void createTestConsignorDataSQL() {
         // TODO remove when final
 
@@ -154,6 +127,76 @@ public class DataModel {
 
         String addConsignor6 = "INSERT INTO consignors (name, email, phone, amount_owed) VALUES ('Garret Ferderber', 'sweetiecutie@gmail.com', '612-018-7421', 14.75)" ;
         executeSqlUpdate(addConsignor6, sqlAction);
+    }
+
+    private static void createTestPaymentDataSQL() {
+        // TODO remove when final
+
+        Random randomNumberGenerator = new Random();
+        int month;
+        int day;
+        int year;
+        String stringMonth;
+        String stringDay;
+        String stringYear;
+
+        String stringDate;
+        java.sql.Date paymentDate;
+
+        int beforeDecimal;
+        int afterDecimal;
+
+        int consignorId;
+
+        for (int x = 1; x < 60; x ++) {
+            month = randomNumberGenerator.nextInt(12) + 1;
+            day = randomNumberGenerator.nextInt(28) + 1;
+            year = randomNumberGenerator.nextInt(4) + 12;
+
+            if (month < 10) {
+                stringMonth = "0" + String.valueOf(month);
+            } else {
+                stringMonth = String.valueOf(month);
+            }
+
+            if (day < 10) {
+                stringDay = "0" + String.valueOf(day);
+            } else {
+                stringDay = String.valueOf(day);
+            }
+
+            if (year < 10) {
+                stringYear = "200" + String.valueOf(year);
+            } else {
+                stringYear = "20" + String.valueOf(year);
+            }
+
+            stringDate = stringYear + "-" + stringMonth + "-" + stringDay;
+            paymentDate = java.sql.Date.valueOf(stringDate);
+
+            beforeDecimal = randomNumberGenerator.nextInt(98) + 1;
+            afterDecimal = randomNumberGenerator.nextInt(98) + 1;
+            String paymentAmountString = beforeDecimal + "." + afterDecimal;
+            Float paymentAmount = Float.parseFloat(paymentAmountString);
+
+            consignorId = randomNumberGenerator.nextInt(6) + 1;
+
+            String psPaymentSql = "INSERT INTO payments (consignorId, date_paid, amount_paid) VALUES ( ?, ?, ? )";
+
+            try {
+                PreparedStatement psPayment = connection.prepareStatement(psPaymentSql);
+                allStatements.add(psPayment);
+                psPayment.setInt(1, consignorId);
+                psPayment.setDate(2, paymentDate);
+                psPayment.setFloat(3, paymentAmount);
+                executePsUpdate(psPayment, "Add payment");
+                System.out.println("Adding payment: " + paymentAmount + ", " + paymentDate);
+
+            } catch (SQLException sqle) {
+                System.out.println("Could not execute search.");
+                System.out.println(sqle);
+            }
+        }
     }
 
     private static void createTestAlbumDataSQL() {
@@ -216,7 +259,7 @@ public class DataModel {
 
                 month = randomNumberGenerator.nextInt(12) + 1;
                 day = randomNumberGenerator.nextInt(28) + 1;
-                year = randomNumberGenerator.nextInt(3) + 13;
+                year = randomNumberGenerator.nextInt(4) + 12;
 
                 if (month < 10) {
                     stringMonth = "0" + String.valueOf(month);
@@ -625,6 +668,31 @@ public class DataModel {
         return consignorAlbums;
     }
 
+    public static ArrayList<Payment> findAllPaymentsToConsignor(int consignorId) {
+
+        ArrayList<Payment> paymentsToConsignor = new ArrayList<Payment>();
+        String consignorPaymentsSql = "SELECT * FROM payments WHERE consignorId = ? ORDER BY date_paid DESC";
+
+        try {
+            PreparedStatement psConsignorPayments = connection.prepareStatement(consignorPaymentsSql);
+            allStatements.add(psConsignorPayments);
+            psConsignorPayments.setInt(1, consignorId);
+            resultSet = psConsignorPayments.executeQuery();
+
+            while (resultSet.next()) {
+                java.sql.Date date = resultSet.getDate("date_paid");
+                float amount = resultSet.getFloat("amount_paid");
+                Payment newPayment = new Payment(consignorId, date, amount);
+                paymentsToConsignor.add(newPayment);
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not execute search.");
+            System.out.println(sqle);
+        }
+
+        return paymentsToConsignor;
+    }
 
     public static void recordPayment(Payment paymentMade) {
 
