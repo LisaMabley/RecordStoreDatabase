@@ -18,6 +18,14 @@ public class RecordStoreController {
         return DataModel.getConsignors(1);
     }
 
+    public static ArrayList<Consignor> requestConsignorsToNotify() {
+        return DataModel.getConsignors(2);
+    }
+
+    public static ArrayList<Consignor> requestConsignorsToPay() {
+        return DataModel.getConsignors(3);
+    }
+
     public static int requestInventoryCheck(String artist, String title, int status) {
         return DataModel.getNumCopiesInInventory(artist, title, status);
     }
@@ -74,6 +82,11 @@ public class RecordStoreController {
 
     public static ArrayList<ConsignorAlbum> requestAllConsignorsAlbums(int consignorId) {
         return DataModel.findAlbumsFromConsignor(consignorId);
+    }
+
+    public static void requestPayConsignorInFull(Consignor consignorToPay) {
+        Payment newPayment = new Payment(consignorToPay.consignorId, consignorToPay.amountOwed);
+        DataModel.payConsignor(consignorToPay, newPayment);
     }
 
 //    public static int requestAlbumStatus(int albumId) {

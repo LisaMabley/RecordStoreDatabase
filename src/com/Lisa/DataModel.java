@@ -79,6 +79,7 @@ public class DataModel {
         }
     }
 
+    // TODO refactor so these are not each repeated twice
     protected static void executeSqlUpdate(String sql, String sqlAction) {
         try {
             statement.executeUpdate(sql);
@@ -90,7 +91,8 @@ public class DataModel {
         }
     }
 
-    protected static void executeSqlUpdate(PreparedStatement ps, String sqlAction) {
+    protected static void executePsUpdate(PreparedStatement ps, String sqlAction) {
+        // TODO Only used when adding test data. Remove when final
         try {
             ps.executeUpdate();
             System.out.println(sqlAction + " succeeded.");
@@ -101,19 +103,33 @@ public class DataModel {
         }
     }
 
-    protected static ResultSet executeSqlQuery(String sql, String sqlAction) {
+//    protected static ResultSet executeSqlQuery(String sql, String sqlAction) {
+//
+//        try {
+//            resultSet = statement.executeQuery(sql);
+//            System.out.println(sqlAction + " succeeded.");
+//
+//        } catch (SQLException sqlException) {
+//            System.out.println(sqlAction + " failed. Could not execute SQL query.");
+//            System.out.println(sqlException);
+//        }
+//
+//        return resultSet;
+//    }
 
-        try {
-            resultSet = statement.executeQuery(sql);
-            System.out.println(sqlAction + " succeeded.");
-
-        } catch (SQLException sqlException) {
-            System.out.println(sqlAction + " failed. Could not execute SQL query.");
-            System.out.println(sqlException);
-        }
-
-        return resultSet;
-    }
+//    protected static ResultSet executePsQuery(PreparedStatement ps, String sqlAction) {
+//
+//        try {
+//            resultSet = statement.executeQuery(sql);
+//            System.out.println(sqlAction + " succeeded.");
+//
+//        } catch (SQLException sqlException) {
+//            System.out.println(sqlAction + " failed. Could not execute SQL query.");
+//            System.out.println(sqlException);
+//        }
+//
+//        return resultSet;
+//    }
 
     private static void createTestConsignorDataSQL() {
         // TODO remove when final
@@ -253,7 +269,7 @@ public class DataModel {
             psAlbum.setDate(6, date_consigned);
             psAlbum.setInt(7, status);
             psAlbum.setFloat(8, price);
-            executeSqlUpdate(psAlbum, "Add album");
+            executePsUpdate(psAlbum, "Add album");
 
         } catch (SQLException sqlException) {
             System.out.println("Could not add album.");
@@ -263,7 +279,6 @@ public class DataModel {
 
     public static ArrayList<Consignor> getConsignors(int findGroup) {
         ArrayList<Consignor> consignorList = new ArrayList<Consignor>();
-        String getConsignorsAction = "Get consignors";
         String getConsignorsSql = "";
 
         switch (findGroup) {
@@ -277,10 +292,13 @@ public class DataModel {
                         "albums.date_consigned < ? ORDER BY consignors.name";
 //                java.sql.Date AlbumsConsignedBeforeDate = Album.albumsConsignedBeforeThisDateGoToBargainBinToday();
                 break;
+            case 3:
+                getConsignorsSql = "SELECT * FROM consignors WHERE amount_owed > 10 ORDER BY name ASC";
+                break;
         }
 
         try {
-            ResultSet consignorRS = executeSqlQuery(getConsignorsSql, getConsignorsAction);
+            ResultSet consignorRS = statement.executeQuery(getConsignorsSql);
             while (consignorRS.next()) {
                 String consignorName = consignorRS.getString("name");
                 String consignorEmail = consignorRS.getString("email");
@@ -383,7 +401,6 @@ public class DataModel {
     }
 
     public static void addConsignor(String name, String email, String phone) {
-        // TODO Do not allow duplicates to be entered
 
         try {
             String psInsertConsignorSql = "INSERT INTO consignors (name, email, phone) " +
@@ -429,6 +446,7 @@ public class DataModel {
 
             if (newStatus == Album.STATUS_SOLD) {
                 updateStatusSql = "UPDATE albums SET status = ?, date_sold = ? WHERE albumId = ?";
+                updateConsignorBalance(albumToUpdate);
 
             }  else if (newStatus == Album.STATUS_BARGAIN_BIN) {
                 updateStatusSql = "UPDATE albums SET status = ?, price = 1 WHERE albumId = ?";
@@ -451,7 +469,7 @@ public class DataModel {
                 psUdateAlbumStatus.setInt(2, albumToUpdate.albumId);
             }
 
-            executeSqlUpdate(psUdateAlbumStatus, "Update album status");
+            executePsUpdate(psUdateAlbumStatus, "Update album status");
 
         } catch (SQLException sqlException) {
             System.out.println("Could not update album status.");
@@ -472,13 +490,62 @@ public class DataModel {
 //            psUdateAlbumPrice.setInt(1, newPrice);
 //            psUdateAlbumPrice.setInt(2, albumId);
 //
-//            executeSqlUpdate(psUdateAlbumPrice, "Update album price");
+//            executePsUpdate(psUdateAlbumPrice, "Update album price");
 //
 //        } catch (SQLException sqlException) {
 //            System.out.println("Could not update album price.");
 //            System.out.println(sqlException);
 //        }
 //    }
+
+    private static float getConsignorBalance(int consignorId) {
+        String getConsignorBalanceSql = "SELECT amount_owed FROM consignors WHERE consignorId = ?";
+        float consignorBalance = 0.0f;
+
+        try {
+            PreparedStatement psConsignorBalance = connection.prepareStatement(getConsignorBalanceSql);
+            allStatements.add(psConsignorBalance);
+            psConsignorBalance.setInt(1, consignorId);
+            ResultSet consignorRS = psConsignorBalance.executeQuery();
+            while (consignorRS.next()) {
+                consignorBalance = consignorRS.getFloat("amount_owed");
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("Failed to read result set.");
+            System.out.println(sqle);
+        }
+        return consignorBalance;
+    }
+
+    private static void setConsignorBalance(int consignorId, float newBalance) {
+        String psSetConsignorBalanceSql = "UPDATE consignors SET amount_owed = ? WHERE consignorId = ?";
+
+        try {
+            PreparedStatement psSetConsignorBalance = connection.prepareStatement(psSetConsignorBalanceSql);
+            allStatements.add(psSetConsignorBalance);
+            psSetConsignorBalance.setFloat(1, newBalance);
+            psSetConsignorBalance.setInt(2, consignorId);
+            psSetConsignorBalance.executeUpdate();
+
+        } catch (SQLException sqle) {
+            System.out.println("Failed to read result set.");
+            System.out.println(sqle);
+        }
+    }
+
+    private static void updateConsignorBalance(Album albumSold) {
+        float amountConsignorEarned = albumSold.price * .4f;
+        float consignorBalance = getConsignorBalance(albumSold.consignorId);
+        consignorBalance += amountConsignorEarned;
+        setConsignorBalance(albumSold.consignorId, consignorBalance);
+    }
+
+    private static void updateConsignorBalance(Payment paymentMade) {
+        float consignorBalance = getConsignorBalance(paymentMade.consignorId);
+        consignorBalance -= paymentMade.amount;
+        setConsignorBalance(paymentMade.consignorId, consignorBalance);
+    }
 
     public static ArrayList<Album> findAlbumsOfAge(java.sql.Date consignedBefore, int status) {
 
@@ -536,25 +603,27 @@ public class DataModel {
         return consignorAlbums;
     }
 
-//    public static int getAlbumStatus(int albumId) {
-//        int albumStatus = 0;
-//        String albumStatusSql = "SELECT status FROM albums WHERE albumId = ?";
-//
-//        try {
-//            PreparedStatement psAlbumStatus = connection.prepareStatement(albumStatusSql);
-//            allStatements.add(psAlbumStatus);
-//            psAlbumStatus.setInt(1, albumId);
-//            resultSet = psAlbumStatus.executeQuery();
-//            albumStatus = resultSetToStatusInt(resultSet);
-//
-//
-//        } catch (SQLException sqle) {
-//            System.out.println("Could not find album.");
-//            System.out.println(sqle);
-//        }
-//
-//        return albumStatus;
-//    }
+    public static void payConsignor(Consignor consignorToPay, Payment paymentMade) {
+
+        updateConsignorBalance(paymentMade);
+
+        try {
+            // TODO correct spelling error/inconsistency in column name "consignerId" and recreate tables
+            String psInsertPaymentSql = "INSERT INTO payments (consignerId, date_paid, amount_paid) " +
+                    "VALUES ( ?, ?, ? )";
+            PreparedStatement psInsertPayment = connection.prepareStatement(psInsertPaymentSql);
+            allStatements.add(psInsertPayment);
+            psInsertPayment.setInt(1, paymentMade.consignorId);
+            psInsertPayment.setDate(2, paymentMade.date);
+            psInsertPayment.setFloat(3, paymentMade.amount);
+            psInsertPayment.executeUpdate();
+            System.out.println("Added payment: " + paymentMade.date + ", " + paymentMade.amount);
+
+        } catch (SQLException sqlException) {
+            System.out.println("Could not add payment.");
+            System.out.println(sqlException);
+        }
+    }
 
     private static ArrayList<Album> resultSetToAlbumArrayList(ResultSet resultSet) {
         ArrayList<Album> arraylist = new ArrayList<Album>();

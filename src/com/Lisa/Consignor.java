@@ -12,8 +12,8 @@ public class Consignor {
     protected float amountOwed;
 
     protected static final int FINDGROUP_ALL_CONSIGNORS = 1;
-    protected static final int FINDGROUP_UNSOLD_ALBUMS = 2;
-    protected static final int FINDGROUP_OWED_TEN = 3;
+    protected static final int FINDGROUP_TO_NOTIFY = 2;
+    protected static final int FINDGROUP_TO_PAY = 3;
 
     public Consignor(int id, String name, String phone, String email, Float amountOwed) {
         this.name = name;
@@ -34,6 +34,21 @@ public class Consignor {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String getConsignorNotificationDetails() {
+        return "";
+    }
+
+    public String getConsignorPaymentDetails() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String amountOwed = "Owed: $" + this.amountOwed + "\n\n";
+        stringBuilder.append(amountOwed);
+        String email = "Email address: " + this.email + "\n";
+        stringBuilder.append(email);
+        String phone = "Phone number: " + this.phoneNumber;
+        stringBuilder.append(phone);
+        return stringBuilder.toString();
     }
 
     public String getDetails() {

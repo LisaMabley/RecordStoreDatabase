@@ -21,11 +21,11 @@
         <children>
           <component id="3137e" class="javax.swing.JButton" binding="quitButton" default-binding="true">
             <constraints>
-              <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
-              <text value="Quit"/>
+              <text value="Quit Program"/>
             </properties>
           </component>
           <component id="32033" class="javax.swing.JButton" binding="sellAlbumButton" default-binding="true">
@@ -71,6 +71,7 @@
               <gridbag top="10" left="10" bottom="10" right="10" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <autoscrolls value="false"/>
               <background color="-1118482"/>
               <editable value="false"/>
               <focusable value="false"/>
@@ -132,6 +133,12 @@
               <wrapStyleWord value="true"/>
             </properties>
           </component>
+          <vspacer id="cf83a">
+            <constraints>
+              <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+          </vspacer>
         </children>
       </grid>
     </children>

@@ -9,6 +9,13 @@ import java.util.Date;
 public class Payment {
     protected int paymentId;
     protected int consignorId;
-    protected Date date;
+    protected java.sql.Date date;
     protected float amount;
+
+    public Payment(int consignorId, float amount) {
+        this.consignorId = consignorId;
+        this.amount = amount;
+        java.util.Date utilDate = new java.util.Date();
+        this.date = new java.sql.Date(utilDate.getTime());
+    }
 }

@@ -1,30 +1,97 @@
 package com.Lisa;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Created by lisa on 5/6/15.
  */
+
 public class ConsignorsGUI extends JPanel {
 
     private JPanel consignorsPanel;
     private JButton payOtherAmountButton;
     private JButton payInFullButton;
-    private JList consignorJList;
+    private JList<Consignor> consignorJList;
     private JSpinner payAmountSpinner;
-    private JTextArea consignorAlbumsTextArea;
-    private JTextArea textArea1;
+    private JTextArea consignorDetailsTextArea;
+    private JTextArea onTheFirstOfTextArea;
+    private JButton findConsignorsToPay;
+    private JButton findConsignorsToNotify;
+    private JButton findInactiveConsignorsButton;
+    private JTextArea everyMondayNotifyAllTextArea;
     private JComboBox searchPurposeComboBox;
+    private boolean detailDisplayModeNotify;
+
+    private static DefaultListModel<Consignor> consignorListModel = new DefaultListModel<Consignor>();
 
     // Constructor
     public ConsignorsGUI() {
 
-        // Set options for purpose
-        final String[] purposeOptions = {"Find Consignors Owed More Than $10", "Find Consignors with Unsold Albums"};
+        consignorJList.setModel(consignorListModel);
+        consignorJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        searchPurposeComboBox.addItem(purposeOptions[0]);
-        searchPurposeComboBox.addItem(purposeOptions[1]);
-        searchPurposeComboBox.setSelectedItem(purposeOptions[0]);
+        findConsignorsToNotify.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                detailDisplayModeNotify = true;
+                displayConsignorsToNotify();
+            }
+        });
+
+        findConsignorsToPay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                detailDisplayModeNotify = false;
+                displayConsignorsToPay();
+                payInFullButton.setEnabled(true);
+            }
+        });
+
+        consignorJList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!consignorJList.isSelectionEmpty()) {
+                    Consignor selectedConsignor = consignorJList.getSelectedValue();
+                    if (detailDisplayModeNotify) {
+                        consignorDetailsTextArea.setText(selectedConsignor.getConsignorNotificationDetails());
+                    } else {
+                        consignorDetailsTextArea.setText(selectedConsignor.getConsignorPaymentDetails());
+                    }
+                }
+            }
+        });
+
+        payInFullButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Consignor selectedConsignor = consignorJList.getSelectedValue();
+                RecordStoreController.requestPayConsignorInFull(selectedConsignor);
+                consignorDetailsTextArea.setText("");
+                consignorListModel.removeElement(selectedConsignor);
+            }
+        });
+    }
+
+    private void displayConsignorsToPay() {
+        reset();
+        ArrayList<Consignor> consignorsToPay = RecordStoreController.requestConsignorsToPay();
+        for (Consignor consignor : consignorsToPay) {
+            consignorListModel.addElement(consignor);
+        }
+    }
+
+    private void displayConsignorsToNotify() {
+        ArrayList<Consignor> consignorsToNotify = RecordStoreController.requestConsignorsToNotify();
+    }
+
+    private void reset() {
+        consignorDetailsTextArea.setText("");
+        consignorListModel.removeAllElements();
     }
 
     public JPanel getPanel() {

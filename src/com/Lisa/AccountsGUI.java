@@ -22,6 +22,7 @@ public class AccountsGUI extends JPanel {
     private JTextArea addEditAndDeleteTextArea;
     private JList<Payment> paymentsJList;
     private JButton returnSelectedAlbumToButton;
+    private JButton payFullAmountOwedButton;
 
     protected static ArrayList<Consignor> consignorArrayList = new ArrayList<Consignor>();
     protected static DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
@@ -76,7 +77,7 @@ public class AccountsGUI extends JPanel {
 
                         String[] dialogOptions = {"Continue", "Cancel"};
                         int n = JOptionPane.showOptionDialog(null,
-                                "That name is already in our consignor database, \nwith the following contact info: \n" + consignor +
+                                "That name is already in our consignor database, \nwith the following contact info: \n" + consignor.getDetails() +
                                         "\nWould you like to continue to add a new \nconsignor account, or cancel and edit the existing account?",
                                 "Posible Duplicate",
                                 JOptionPane.YES_NO_OPTION,

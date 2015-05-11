@@ -38,6 +38,7 @@ public class InventoryGUI extends JPanel {
         findAlbumsOver37Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // TODO Change 37 days to 42 (since we're only notifying once a week, not every day)
                 InventoryGUI.this.albumAgingListModel.removeAllElements();
                 albumAgingArrayList.clear();
                 albumAgingArrayList = RecordStoreController.requestAlbumsOfAge(THIRTY_SEVEN_DAYS);

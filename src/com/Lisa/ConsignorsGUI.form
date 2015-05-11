@@ -5,36 +5,38 @@
       <xy x="20" y="20" width="700" height="550"/>
     </constraints>
     <properties>
-      <maximumSize width="700" height="550"/>
-      <minimumSize width="700" height="550"/>
-      <preferredSize width="700" height="550"/>
+      <maximumSize width="650" height="550"/>
+      <minimumSize width="650" height="550"/>
+      <preferredSize width="650" height="550"/>
     </properties>
     <border type="none"/>
     <children>
-      <component id="b9dc7" class="javax.swing.JTextArea" binding="consignorAlbumsTextArea">
+      <component id="b9dc7" class="javax.swing.JTextArea" binding="consignorDetailsTextArea">
         <constraints>
-          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+          <grid row="9" column="4" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="50"/>
           </grid>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-1118482"/>
-          <maximumSize width="250" height="2147483647"/>
-          <minimumSize width="250" height="16"/>
-          <preferredSize width="250" height="16"/>
+          <lineWrap value="true"/>
+          <maximumSize width="300" height="2147483647"/>
+          <minimumSize width="300" height="16"/>
+          <preferredSize width="300" height="16"/>
+          <wrapStyleWord value="true"/>
         </properties>
       </component>
       <scrollpane id="73dee">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <horizontalScrollBarPolicy value="31"/>
-          <maximumSize width="250" height="32767"/>
-          <minimumSize width="250" height="20"/>
-          <preferredSize width="250" height="128"/>
+          <maximumSize width="160" height="120"/>
+          <minimumSize width="160" height="120"/>
+          <preferredSize width="160" height="120"/>
           <verticalScrollBarPolicy value="22"/>
         </properties>
         <border type="none"/>
@@ -42,23 +44,99 @@
           <component id="b569e" class="javax.swing.JList" binding="consignorJList">
             <constraints/>
             <properties>
-              <enabled value="false"/>
-              <maximumSize width="200" height="0"/>
-              <minimumSize width="200" height="0"/>
-              <preferredSize width="200" height="0"/>
+              <enabled value="true"/>
+              <maximumSize width="160" height="90"/>
+              <minimumSize width="160" height="90"/>
+              <preferredSize width="160" height="120"/>
             </properties>
           </component>
         </children>
       </scrollpane>
-      <hspacer id="6acdd">
+      <component id="7bcc4" class="javax.swing.JButton" binding="findInactiveConsignorsButton" default-binding="true">
         <constraints>
-          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="7" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <enabled value="false"/>
+          <text value="Find Inactive Consignors"/>
+        </properties>
+      </component>
+      <component id="4ba04" class="javax.swing.JTextArea" binding="onTheFirstOfTextArea" default-binding="true">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="4" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-1118482"/>
+          <editable value="false"/>
+          <lineWrap value="true"/>
+          <minimumSize width="450" height="140"/>
+          <preferredSize width="450" height="80"/>
+          <text value="On the first of each month, the manager will email checks to all consignors owed more than $10, paying their balance in full. Any consignor wishing to be paid a balance of less than $10, or wishing to be paid at a different time, may stop in during store hours and be paid from the register. All such payments must be recorded in the Consignor Accounts tab."/>
+          <wrapStyleWord value="true"/>
+        </properties>
+      </component>
+      <vspacer id="c428">
+        <constraints>
+          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
-      </hspacer>
+      </vspacer>
+      <vspacer id="e419d">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </vspacer>
+      <component id="fcb4d" class="javax.swing.JTextArea" binding="everyMondayNotifyAllTextArea" default-binding="true">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="4" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-1118482"/>
+          <editable value="false"/>
+          <focusable value="false"/>
+          <lineWrap value="true"/>
+          <minimumSize width="450" height="60"/>
+          <opaque value="true"/>
+          <preferredSize width="450" height="50"/>
+          <text value="Every Monday, notify all consignors whose albums have not sold in 30 days that they have one week to pick up their albums or they will be moved to the bargain basement and sold for $1."/>
+          <wrapStyleWord value="true"/>
+        </properties>
+      </component>
+      <component id="76a59" class="javax.swing.JButton" binding="findConsignorsToNotify" default-binding="true">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <maximumSize width="160" height="29"/>
+          <minimumSize width="160" height="29"/>
+          <preferredSize width="160" height="29"/>
+          <text value="Find Consignors to Notify"/>
+        </properties>
+      </component>
+      <component id="d2575" class="javax.swing.JButton" binding="findConsignorsToPay" default-binding="true">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <maximumSize width="160" height="29"/>
+          <minimumSize width="160" height="29"/>
+          <preferredSize width="160" height="29"/>
+          <text value="Find Consignors to Pay"/>
+        </properties>
+      </component>
       <component id="97396" class="javax.swing.JButton" binding="payInFullButton" default-binding="true">
         <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -68,7 +146,7 @@
       </component>
       <component id="7af12" class="javax.swing.JButton" binding="payOtherAmountButton" default-binding="true">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
@@ -78,32 +156,28 @@
       </component>
       <component id="f77d" class="javax.swing.JSpinner" binding="payAmountSpinner">
         <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
           <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <enabled value="false"/>
+          <maximumSize width="50" height="32767"/>
+          <minimumSize width="50" height="28"/>
+          <preferredSize width="50" height="28"/>
         </properties>
       </component>
-      <component id="4ba04" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+      <hspacer id="60e3">
         <constraints>
-          <grid row="0" column="1" row-span="1" col-span="4" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+          <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
-        <properties>
-          <background color="-1118482"/>
-          <editable value="false"/>
-        </properties>
-      </component>
-      <component id="371cc" class="javax.swing.JComboBox" binding="searchPurposeComboBox">
+      </hspacer>
+      <vspacer id="2f7ec">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
-        <properties/>
-      </component>
+      </vspacer>
     </children>
   </grid>
 </form>

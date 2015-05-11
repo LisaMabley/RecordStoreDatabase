@@ -60,6 +60,8 @@
         </constraints>
         <properties>
           <background color="-1118482"/>
+          <lineWrap value="true"/>
+          <wrapStyleWord value="true"/>
         </properties>
       </component>
       <component id="92c02" class="javax.swing.JButton" binding="markSelectedButton" default-binding="true">

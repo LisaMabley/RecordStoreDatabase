@@ -45,7 +45,6 @@ public class Album {
 
     protected SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
 
-    // TODO C'mon, do we really need three constructors?!?
     Album(int consignorId, String artistName, String albumTitle, int size, int condition, float price) {
         this.consignorId = consignorId;
         this.artist = artistName;

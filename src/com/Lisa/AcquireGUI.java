@@ -20,6 +20,7 @@ public class AcquireGUI extends JPanel {
     private JTextArea inventoryTextArea;
     private JButton buyAlbumButton;
     private JButton declineButton;
+    private JTextArea enterCompleteArtistNameTextArea;
 
     public AcquireGUI() {
         // Set options for size comboBox
