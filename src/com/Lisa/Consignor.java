@@ -1,5 +1,7 @@
 package com.Lisa;
 
+import java.util.ArrayList;
+
 /**
  * Created by lisa on 4/21/15.
  */
@@ -37,7 +39,18 @@ public class Consignor {
     }
 
     public String getConsignorNotificationDetails() {
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        String email = "Email address: " + this.email + "\n";
+        stringBuilder.append(email);
+        String phone = "Phone number: " + this.phoneNumber;
+        stringBuilder.append(phone);
+        stringBuilder.append("\n\n");
+        ArrayList<ConsignorAlbum> unsoldAlbums = RecordStoreController.requestConsignorsUnsoldAlbums(this.consignorId);
+        for (ConsignorAlbum album : unsoldAlbums) {
+            stringBuilder.append(album);
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     public String getConsignorPaymentDetails() {

@@ -15,15 +15,15 @@ public class RecordStoreController {
     }
 
     public static ArrayList<Consignor> requestConsignors() {
-        return DataModel.getConsignors(1);
+        return DataModel.getConsignors(Consignor.FINDGROUP_ALL_CONSIGNORS);
     }
 
     public static ArrayList<Consignor> requestConsignorsToNotify() {
-        return DataModel.getConsignors(2);
+        return DataModel.getConsignors(Consignor.FINDGROUP_TO_NOTIFY);
     }
 
     public static ArrayList<Consignor> requestConsignorsToPay() {
-        return DataModel.getConsignors(3);
+        return DataModel.getConsignors(Consignor.FINDGROUP_TO_PAY);
     }
 
     public static int requestInventoryCheck(String artist, String title, int status) {
@@ -84,9 +84,13 @@ public class RecordStoreController {
         return DataModel.findAlbumsFromConsignor(consignorId);
     }
 
+    public static ArrayList<ConsignorAlbum> requestConsignorsUnsoldAlbums(int consignorId) {
+        return DataModel.findUnsoldAlbumsFromConsignor(consignorId);
+    }
+
     public static void requestPayConsignorInFull(Consignor consignorToPay) {
         Payment newPayment = new Payment(consignorToPay.consignorId, consignorToPay.amountOwed);
-        DataModel.payConsignor(consignorToPay, newPayment);
+        DataModel.recordPayment(newPayment);
     }
 
 //    public static int requestAlbumStatus(int albumId) {

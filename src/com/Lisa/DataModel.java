@@ -60,7 +60,7 @@ public class DataModel {
 
         String createPaymentsTableSQL = "CREATE TABLE payments (" +
                 "paymentId int PRIMARY KEY GENERATED ALWAYS AS IDENTITY, " +
-                "consignerId int, " +
+                "consignorId int, " +
                 "date_paid DATE, " +
                 "amount_paid FLOAT)";
         String createPaymentsTableAction = "Create payments table";
@@ -278,43 +278,40 @@ public class DataModel {
     }
 
     public static ArrayList<Consignor> getConsignors(int findGroup) {
-        ArrayList<Consignor> consignorList = new ArrayList<Consignor>();
+        ArrayList<Consignor> consignorArrayList = new ArrayList<Consignor>();
         String getConsignorsSql = "";
+        java.sql.Date albumsConsignedBeforeDate = Album.albumsConsignedBeforeThisDateGoToBargainBinToday();
 
         switch (findGroup) {
             case 1:
                 getConsignorsSql = "SELECT * FROM consignors ORDER BY name ASC";
                 break;
             case 2:
-                // TODO Do I need "DISTINCT"?
-                getConsignorsSql = "SELECT * FROM consignors" +
-                        "INNER JOIN albums ON consignors.consignorId = albums.consignorId WHERE albums.status = 1 AND " +
-                        "albums.date_consigned < ? ORDER BY consignors.name";
-//                java.sql.Date AlbumsConsignedBeforeDate = Album.albumsConsignedBeforeThisDateGoToBargainBinToday();
+                // Informed by this tutorial: https://howtoprogramwithjava.com/sql-subquery/
+                getConsignorsSql = "SELECT * FROM consignors WHERE consignorId in (SELECT DISTINCT consignorId FROM albums WHERE status = 1 AND date_consigned < ?) ORDER BY name";
                 break;
             case 3:
                 getConsignorsSql = "SELECT * FROM consignors WHERE amount_owed > 10 ORDER BY name ASC";
                 break;
         }
-
         try {
-            ResultSet consignorRS = statement.executeQuery(getConsignorsSql);
-            while (consignorRS.next()) {
-                String consignorName = consignorRS.getString("name");
-                String consignorEmail = consignorRS.getString("email");
-                String consignorPhone = consignorRS.getString("phone");
-                int id = consignorRS.getInt("consignorId");
-                float amountOwed = consignorRS.getFloat("amount_owed");
-                Consignor newConsignor = new Consignor(id, consignorName, consignorEmail, consignorPhone, amountOwed);
-                consignorList.add(newConsignor);
+            if (findGroup == Consignor.FINDGROUP_TO_NOTIFY) {
+                PreparedStatement psConsignorsToNotify = connection.prepareStatement(getConsignorsSql);
+                allStatements.add(psConsignorsToNotify);
+                psConsignorsToNotify.setDate(1, albumsConsignedBeforeDate);
+                resultSet = psConsignorsToNotify.executeQuery();
+            } else {
+                resultSet = statement.executeQuery(getConsignorsSql);
             }
 
+            consignorArrayList = resultSetToConsignorArrayList(resultSet);
+
         } catch (SQLException sqle) {
-            System.out.println("Failed to read result set.");
+            System.out.println("Could not execute search.");
             System.out.println(sqle);
         }
 
-        return consignorList;
+        return consignorArrayList;
     }
 
     public static int getNumCopiesInInventory(String artist, String title, int status) {
@@ -603,13 +600,40 @@ public class DataModel {
         return consignorAlbums;
     }
 
-    public static void payConsignor(Consignor consignorToPay, Payment paymentMade) {
+    public static ArrayList<ConsignorAlbum> findUnsoldAlbumsFromConsignor(int consignorId) {
+
+        ArrayList<Album> unsoldAlbumsFromConsignor = new ArrayList<Album>();
+        String consignorUnsoldAlbumsSql = "SELECT * FROM albums WHERE consignorId = ? AND status = 1 AND date_consigned < ? ORDER BY date_consigned DESC";
+
+        try {
+            PreparedStatement psConsignorUnsoldAlbums = connection.prepareStatement(consignorUnsoldAlbumsSql);
+            allStatements.add(psConsignorUnsoldAlbums);
+            psConsignorUnsoldAlbums.setInt(1, consignorId);
+            psConsignorUnsoldAlbums.setDate(2, Album.albumsConsignedBeforeThisDateGoToBargainBinToday());
+            resultSet = psConsignorUnsoldAlbums.executeQuery();
+            unsoldAlbumsFromConsignor = resultSetToAlbumArrayList(resultSet);
+
+        } catch (SQLException sqle) {
+            System.out.println("Could not execute search.");
+            System.out.println(sqle);
+        }
+
+        ArrayList<ConsignorAlbum> consignorAlbums = new ArrayList<ConsignorAlbum>();
+        for (Album album : unsoldAlbumsFromConsignor) {
+            ConsignorAlbum newConsignorAlbum = new ConsignorAlbum(album);
+            consignorAlbums.add(newConsignorAlbum);
+        }
+
+        return consignorAlbums;
+    }
+
+
+    public static void recordPayment(Payment paymentMade) {
 
         updateConsignorBalance(paymentMade);
 
         try {
-            // TODO correct spelling error/inconsistency in column name "consignerId" and recreate tables
-            String psInsertPaymentSql = "INSERT INTO payments (consignerId, date_paid, amount_paid) " +
+            String psInsertPaymentSql = "INSERT INTO payments (consignorId, date_paid, amount_paid) " +
                     "VALUES ( ?, ?, ? )";
             PreparedStatement psInsertPayment = connection.prepareStatement(psInsertPaymentSql);
             allStatements.add(psInsertPayment);
@@ -646,6 +670,27 @@ public class DataModel {
             }
         } catch (SQLException sqle) {
             System.out.println("Could not create album.");
+            System.out.println(sqle);
+        }
+        return arraylist;
+    }
+
+    private static ArrayList<Consignor> resultSetToConsignorArrayList(ResultSet resultSet) {
+        ArrayList<Consignor> arraylist = new ArrayList<Consignor>();
+
+        try {
+            while (resultSet.next()) {
+                String consignorName = resultSet.getString("name");
+                String consignorEmail = resultSet.getString("email");
+                String consignorPhone = resultSet.getString("phone");
+                int id = resultSet.getInt("consignorId");
+                float amountOwed = resultSet.getFloat("amount_owed");
+                Consignor newConsignor = new Consignor(id, consignorName, consignorEmail, consignorPhone, amountOwed);
+                arraylist.add(newConsignor);
+            }
+
+        } catch (SQLException sqle) {
+            System.out.println("Failed to read result set.");
             System.out.println(sqle);
         }
 

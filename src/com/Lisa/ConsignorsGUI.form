@@ -11,22 +11,6 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="b9dc7" class="javax.swing.JTextArea" binding="consignorDetailsTextArea">
-        <constraints>
-          <grid row="9" column="4" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
-        </constraints>
-        <properties>
-          <background color="-1118482"/>
-          <lineWrap value="true"/>
-          <maximumSize width="300" height="2147483647"/>
-          <minimumSize width="300" height="16"/>
-          <preferredSize width="300" height="16"/>
-          <wrapStyleWord value="true"/>
-        </properties>
-      </component>
       <scrollpane id="73dee">
         <constraints>
           <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -178,6 +162,27 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
       </vspacer>
+      <scrollpane id="a86b4">
+        <constraints>
+          <grid row="9" column="4" row-span="1" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag top="5" left="5" bottom="5" right="5" weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="b9dc7" class="javax.swing.JTextArea" binding="consignorDetailsTextArea">
+            <constraints/>
+            <properties>
+              <background color="-1"/>
+              <lineWrap value="true"/>
+              <maximumSize width="300" height="2147483647"/>
+              <minimumSize width="300" height="16"/>
+              <preferredSize width="300" height="16"/>
+              <wrapStyleWord value="true"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
     </children>
   </grid>
 </form>

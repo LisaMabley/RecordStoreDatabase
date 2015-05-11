@@ -2,6 +2,7 @@ package com.Lisa;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by lisa on 4/21/15.
@@ -104,12 +105,12 @@ public class Album {
 //        this.price = 0;
 //    }
 
-
-//    public static java.sql.Date albumsConsignedBeforeThisDateGoToBargainBinToday() {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.DAY_OF_MONTH, -37);
-//        return new java.sql.Date(calendar.getTime());
-//    }
+    public static java.sql.Date albumsConsignedBeforeThisDateGoToBargainBinToday() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -37);
+        java.util.Date utilDate = calendar.getTime();
+        return new java.sql.Date(utilDate.getTime());
+    }
 
     @Override
     public String toString() {

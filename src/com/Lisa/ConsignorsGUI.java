@@ -86,7 +86,11 @@ public class ConsignorsGUI extends JPanel {
     }
 
     private void displayConsignorsToNotify() {
+        reset();
         ArrayList<Consignor> consignorsToNotify = RecordStoreController.requestConsignorsToNotify();
+        for (Consignor consignor : consignorsToNotify) {
+            consignorListModel.addElement(consignor);
+        }
     }
 
     private void reset() {
