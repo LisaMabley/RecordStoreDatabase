@@ -28,9 +28,9 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-//        createTableSQL();
-//        createTestConsignorDataSQL();
-//        createTestAlbumDataSQL();
+        createTableSQL();
+        createTestConsignorDataSQL();
+        createTestAlbumDataSQL();
     }
 
     protected void createTableSQL() {
@@ -237,9 +237,7 @@ public class DataModel {
                 }
 
                 stringDate = stringYear + "-" + stringMonth + "-" + stringDay;
-                System.out.println(stringDate);
                 dateConsigned = java.sql.Date.valueOf(stringDate);
-                System.out.println(dateConsigned);
 
                 // Add each line to database
                 executeAddAlbumSql(consignorId, artist, title, size, condition, dateConsigned, status, price);

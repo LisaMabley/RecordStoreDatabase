@@ -93,7 +93,7 @@ public class ConsignorsGUI extends JPanel {
         }
     }
 
-    private void reset() {
+    public void reset() {
         consignorDetailsTextArea.setText("");
         consignorListModel.removeAllElements();
     }

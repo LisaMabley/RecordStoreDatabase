@@ -56,10 +56,7 @@ public class AccountsGUI extends JPanel {
 
                 } else {
                     // No consignor selected
-                    consignorNameTextField.setText("");
-                    consignorEmailTextField.setText("");
-                    consignorPhoneTextField.setText("");
-                    consignorAlbumListModel.removeAllElements();
+                    clearFields();
                 }
             }
         });
@@ -156,6 +153,18 @@ public class AccountsGUI extends JPanel {
         for (ConsignorAlbum album : consignorsAlbums) {
             consignorAlbumListModel.addElement(album);
         }
+    }
+
+    private void clearFields() {
+        consignorNameTextField.setText("");
+        consignorEmailTextField.setText("");
+        consignorPhoneTextField.setText("");
+        consignorAlbumListModel.removeAllElements();
+    }
+
+    public void reset() {
+        refreshConsignorList();
+        clearFields();
     }
 
     public JPanel getPanel() {

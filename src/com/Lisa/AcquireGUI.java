@@ -152,7 +152,7 @@ public class AcquireGUI extends JPanel {
         });
     }
 
-    private void resetBuyAlbumFields() {
+    public void resetBuyAlbumFields() {
         artistTextField.setText("");
         titleTextField.setText("");
         consignorCombobox.setSelectedItem(null);

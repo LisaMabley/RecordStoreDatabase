@@ -117,6 +117,11 @@ public class InventoryGUI extends JPanel {
         });
     }
 
+    public void reset() {
+        albumAgingListModel.removeAllElements();
+        albumAgingTextArea.setText("");
+    }
+
     public JPanel getPanel() {
         return inventoryPanel;
     }

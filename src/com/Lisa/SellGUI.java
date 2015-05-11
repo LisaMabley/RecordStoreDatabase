@@ -25,7 +25,7 @@ public class SellGUI extends JPanel {
     private JButton searchButton;
     private JTextArea searchStoreInventoryByTextArea;
 
-    DefaultListModel<Album> searchResultsListModel = new DefaultListModel<Album>();
+    private static DefaultListModel<Album> searchResultsListModel = new DefaultListModel<Album>();
 
     // Indicates whether searching artist or title
     public static final int ARTIST_FIELD = 1;
@@ -109,7 +109,7 @@ public class SellGUI extends JPanel {
         });
     }
 
-    private void resetSearchFields() {
+    public void resetSearchFields() {
         searchTextField.setText("");
         searchResultTextArea.setText("");
 
