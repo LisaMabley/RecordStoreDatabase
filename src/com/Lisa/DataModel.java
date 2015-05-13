@@ -28,7 +28,9 @@ public class DataModel {
     public DataModel() {
 
         openDatabaseConnections();
-//        createTableSQL();
+        createTableSQL();
+
+        // CLARA: UNCOMMENT THESE THREE METHODS IF YOU WANT SOME SAMPLE DATA
 //        createTestConsignorDataSQL();
 //        createTestAlbumDataSQL();
 //        createTestPaymentDataSQL();
@@ -473,10 +475,6 @@ public class DataModel {
         }
     }
 
-//    public static void updateAlbumStatus(Album albumToUpdate, int newStatus) {
-//        updateAlbumStatus(albumToUpdate, newStatus, null);
-//    }
-
     public static void updateAlbumStatus(Album albumToUpdate, int newStatus, java.sql.Date dateSold) {
 
         try {
@@ -514,27 +512,6 @@ public class DataModel {
             System.out.println(sqlException);
         }
     }
-
-//    public static void updateAlbumPrice(Album albumToUpdate, int newPrice) {
-//
-//        int albumId = albumToUpdate.albumId;
-//
-//        try {
-//            String updatePriceSql = "UPDATE albums SET price = ? WHERE albumId = ?";
-//
-//            PreparedStatement psUdateAlbumPrice = connection.prepareStatement(updatePriceSql);
-//            allStatements.add(psUdateAlbumPrice);
-//
-//            psUdateAlbumPrice.setInt(1, newPrice);
-//            psUdateAlbumPrice.setInt(2, albumId);
-//
-//            executePsUpdate(psUdateAlbumPrice, "Update album price");
-//
-//        } catch (SQLException sqlException) {
-//            System.out.println("Could not update album price.");
-//            System.out.println(sqlException);
-//        }
-//    }
 
     private static float getConsignorBalance(int consignorId) {
         String getConsignorBalanceSql = "SELECT amount_owed FROM consignors WHERE consignorId = ?";
@@ -762,22 +739,6 @@ public class DataModel {
 
         return arraylist;
     }
-
-//    private static int resultSetToStatusInt(ResultSet resultSet) {
-//        int status = 0;
-//
-//        try {
-//            while (resultSet.next()) {
-//                status = resultSet.getInt("status");
-//            }
-//
-//        } catch (SQLException sqle) {
-//            System.out.println("Could not get album status.");
-//            System.out.println(sqle);
-//        }
-//
-//        return status;
-//    }
 
     public static void closeDbConnections() {
 
