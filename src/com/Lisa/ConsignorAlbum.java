@@ -8,10 +8,6 @@ import java.util.Calendar;
 
 public class ConsignorAlbum extends Album {
 
-    public ConsignorAlbum(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, java.util.Date dateConsigned, int status, java.util.Date dateSold) {
-        super(id, consignor, artistName, albumTitle, size, condition, price, dateConsigned, status, dateSold);
-    }
-
     public ConsignorAlbum(Album album) {
         super(album.albumId, album.consignorId, album.artist, album.title, album.size, album.condition, album.price, album.dateConsigned, album.status, album.dateSold);
     }

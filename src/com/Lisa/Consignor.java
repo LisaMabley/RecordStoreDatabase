@@ -13,10 +13,6 @@ public class Consignor {
     protected String phoneNumber;
     protected float amountOwed;
 
-    protected static final int FINDGROUP_ALL_CONSIGNORS = 1;
-    protected static final int FINDGROUP_TO_NOTIFY = 2;
-    protected static final int FINDGROUP_TO_PAY = 3;
-
     public Consignor(int id, String name, String phone, String email, Float amountOwed) {
         this.name = name;
         this.email = email;
@@ -31,11 +27,6 @@ public class Consignor {
 
     public int getId() {
         return this.consignorId;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
     }
 
     public String getConsignorNotificationDetails() {
@@ -66,5 +57,10 @@ public class Consignor {
 
     public String getDetails() {
         return this.name + ": " + this.email + ", " + this.phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

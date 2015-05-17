@@ -141,7 +141,7 @@ public class AccountsGUI extends JPanel {
 
     private void refreshConsignorList() {
         // Populate comboBox model
-        consignorArrayList = RecordStoreController.requestConsignors();
+        consignorArrayList = RecordStoreController.requestAllConsignors();
         consignorComboBoxModel.removeAllElements();
         Consignor nullValueObject = new Consignor(-1, "none selected", "", "", (float)0.0);
         consignorComboBoxModel.addElement(nullValueObject);

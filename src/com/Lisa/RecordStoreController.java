@@ -14,17 +14,7 @@ public class RecordStoreController {
         TabsGUI tabs = new TabsGUI();
     }
 
-    public static ArrayList<Consignor> requestConsignors() {
-        return DataModel.getConsignors(Consignor.FINDGROUP_ALL_CONSIGNORS);
-    }
-
-    public static ArrayList<Consignor> requestConsignorsToNotify() {
-        return DataModel.getConsignors(Consignor.FINDGROUP_TO_NOTIFY);
-    }
-
-    public static ArrayList<Consignor> requestConsignorsToPay() {
-        return DataModel.getConsignors(Consignor.FINDGROUP_TO_PAY);
-    }
+    // ALBUM METHODS
 
     public static int requestInventoryCheck(String artist, String title, int status) {
         return DataModel.getNumCopiesInInventory(artist, title, status);
@@ -38,28 +28,12 @@ public class RecordStoreController {
         return DataModel.searchInventoryForAlbums(searchString, searchField);
     }
 
-    public static void requestAddConsignor(String name, String email, String phone) {
-        DataModel.addConsignor(name, email, phone);
-    }
-
-    public static void requestRemoveConsignor(Consignor consignorToRemove) {
-        DataModel.removeConsignor(consignorToRemove);
-    }
-
-//    public static void requestUpdateAlbumStatus(int albumId, int newStatus) {
-//        DataModel.updateAlbumStatus(albumId, newStatus);
-//    }
-
     public static void requestUpdateAlbumStatus(Album albumToUpdate, int newStatus) {
         if (newStatus == Album.STATUS_SOLD) {
             albumToUpdate.setSoldDate();
         }
         DataModel.updateAlbumStatus(albumToUpdate, newStatus, albumToUpdate.dateSold);
     }
-
-//    public static void requestUpdateAlbumPrice(Album albumToUpdate, int newPrice) {
-//        DataModel.updateAlbumPrice(albumToUpdate, newPrice);
-//    }
 
     public static ArrayList<Album> requestAlbumsOfAge(int ageToFind) {
 
@@ -88,6 +62,28 @@ public class RecordStoreController {
         return DataModel.findUnsoldAlbumsFromConsignor(consignorId);
     }
 
+    // CONSIGNOR METHODS
+
+    public static ArrayList<Consignor> requestAllConsignors() {
+        return DataModel.getAllConsignors();
+    }
+
+    public static ArrayList<Consignor> requestConsignorsToNotify() {
+        return DataModel.getConsignorsToNotify();
+    }
+
+    public static ArrayList<Consignor> requestConsignorsToPay() {
+        return DataModel.getConsignorsToPay();
+    }
+
+    public static void requestAddConsignor(String name, String email, String phone) {
+        DataModel.addConsignor(name, email, phone);
+    }
+
+    public static void requestRemoveConsignor(Consignor consignorToRemove) {
+        DataModel.removeConsignor(consignorToRemove);
+    }
+
     public static ArrayList<Payment> requestAllConsignorsPayments(int consignorId) {
         return DataModel.findAllPaymentsToConsignor(consignorId);
     }
@@ -96,8 +92,4 @@ public class RecordStoreController {
         Payment newPayment = new Payment(consignorToPay.consignorId, consignorToPay.amountOwed);
         DataModel.recordPayment(newPayment);
     }
-
-//    public static int requestAlbumStatus(int albumId) {
-//        return DataModel.getAlbumStatus(albumId);
-//    }
 }

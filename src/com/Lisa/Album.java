@@ -58,19 +58,6 @@ public class Album {
         this.status = STATUS_STORE;
     }
 
-//    Album(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, int status) {
-//        this.albumId = id;
-//        this.consignorId = consignor;
-//        this.artist = artistName;
-//        this.title = albumTitle;
-//        this.size = size;
-//        this.condition = condition;
-//        this.price = price;
-//        java.util.Date utilDate = new java.util.Date();
-//        this.dateConsigned = new java.sql.Date(utilDate.getTime());
-//        this.status = status;
-//    }
-
     Album(int id, int consignor, String artistName, String albumTitle, int size, int condition, float price, java.util.Date dateConsigned, int status, java.util.Date dateSold) {
         this.albumId = id;
         this.consignorId = consignor;
@@ -89,21 +76,6 @@ public class Album {
         this.dateSold = new java.sql.Date(utilDate.getTime());
         System.out.println("Sold date: " + this.dateSold);
     }
-
-//    public void moveToBargainBin() {
-//        this.status = STATUS_BARGAIN_BIN;
-//        this.price = 1;
-//    }
-//
-//    public void setDonated() {
-//        this.status = STATUS_DONATED;
-//        this.price = 0;
-//    }
-
-//    public void setReturnedToConsignor() {
-//        this.status = STATUS_RETURNED_TO_CONSIGNOR;
-//        this.price = 0;
-//    }
 
     public static java.sql.Date albumsConsignedBeforeThisDateGoToBargainBinToday() {
         Calendar calendar = Calendar.getInstance();
