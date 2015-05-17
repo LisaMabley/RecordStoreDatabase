@@ -23,6 +23,7 @@ public class AccountsGUI extends JPanel {
     private JList<Payment> paymentsJList;
     private JButton returnSelectedAlbumToButton;
     private JButton payFullAmountOwedButton;
+    private JButton quitProgramButton;
 
     protected static ArrayList<Consignor> consignorArrayList = new ArrayList<Consignor>();
     protected static DefaultComboBoxModel<Consignor> consignorComboBoxModel = new DefaultComboBoxModel<Consignor>();
@@ -133,6 +134,14 @@ public class AccountsGUI extends JPanel {
                     }
                     consignorAlbumListModel.removeElement(selectedAlbum);
                 }
+            }
+        });
+
+        quitProgramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataModel.closeDbConnections();
+                System.exit(0);
             }
         });
 

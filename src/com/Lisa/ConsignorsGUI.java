@@ -24,6 +24,10 @@ public class ConsignorsGUI extends JPanel {
     private JButton findConsignorsToNotify;
     private JButton findInactiveConsignorsButton;
     private JTextArea everyMondayNotifyAllTextArea;
+    private JButton quitProgramButton;
+    private JSpinner spinner1;
+    private JSpinner spinner2;
+    private JSpinner spinner3;
     private JComboBox searchPurposeComboBox;
     private boolean detailDisplayModeNotify;
 
@@ -39,6 +43,7 @@ public class ConsignorsGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 detailDisplayModeNotify = true;
+                payInFullButton.setEnabled(false);
                 displayConsignorsToNotify();
             }
         });
@@ -48,7 +53,6 @@ public class ConsignorsGUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 detailDisplayModeNotify = false;
                 displayConsignorsToPay();
-                payInFullButton.setEnabled(true);
             }
         });
 
@@ -61,6 +65,7 @@ public class ConsignorsGUI extends JPanel {
                         consignorDetailsTextArea.setText(selectedConsignor.getConsignorNotificationDetails());
                     } else {
                         consignorDetailsTextArea.setText(selectedConsignor.getConsignorPaymentDetails());
+                        payInFullButton.setEnabled(true);
                     }
                 }
             }
@@ -73,6 +78,14 @@ public class ConsignorsGUI extends JPanel {
                 RecordStoreController.requestPayConsignorInFull(selectedConsignor);
                 consignorDetailsTextArea.setText("");
                 consignorListModel.removeElement(selectedConsignor);
+            }
+        });
+
+        quitProgramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataModel.closeDbConnections();
+                System.exit(0);
             }
         });
     }

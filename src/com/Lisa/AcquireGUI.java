@@ -21,6 +21,7 @@ public class AcquireGUI extends JPanel {
     private JButton buyAlbumButton;
     private JButton declineButton;
     private JTextArea enterCompleteArtistNameTextArea;
+    private JButton quitProgramButton;
 
     public AcquireGUI() {
         // Set options for size comboBox
@@ -148,6 +149,14 @@ public class AcquireGUI extends JPanel {
                 Album newAlbum = new Album(consignorId, name, title, size, condition, price);
                 RecordStoreController.requestAddAlbum(newAlbum);
                 resetBuyAlbumFields();
+            }
+        });
+
+        quitProgramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataModel.closeDbConnections();
+                System.exit(0);
             }
         });
     }

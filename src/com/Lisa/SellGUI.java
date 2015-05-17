@@ -99,7 +99,6 @@ public class SellGUI extends JPanel {
             }
         });
 
-        // TODO Add quit button to all screens instead of just this one
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -55,7 +55,7 @@ public class TabsGUI extends JFrame {
             }
         });
 
-        setSize(new Dimension(750, 500));
+        setSize(new Dimension(750, 700));
         setVisible(true);
         pack();
     }
