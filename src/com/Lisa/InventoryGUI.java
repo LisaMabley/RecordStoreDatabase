@@ -115,8 +115,7 @@ public class InventoryGUI extends JPanel {
         quitProgramButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DataModel.closeDbConnections();
-                System.exit(0);
+                RecordStoreController.quitProgram();
             }
         });
     }

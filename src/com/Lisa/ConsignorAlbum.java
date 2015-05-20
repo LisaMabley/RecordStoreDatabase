@@ -22,7 +22,7 @@ public class ConsignorAlbum extends Album {
                 return this.title + ", will be donated on " + this.getDateStatusWillChange();
 
             case 3:
-                return this.title + ", sold on " + dateFormat.format(this.dateSold);
+                return this.title + ", sold on " + RecordStoreController.dateFormat.format(this.dateSold);
 
             case 4:
                 return this.title + ", donated to charity";
@@ -40,16 +40,16 @@ public class ConsignorAlbum extends Album {
         Calendar calendar = Calendar.getInstance();
         java.util.Date utilDate = this.dateConsigned;
         calendar.setTime(utilDate);
-        dateFormat.setCalendar(calendar);
+        RecordStoreController.dateFormat.setCalendar(calendar);
 
         switch (this.status) {
             case 1:
                 calendar.add(Calendar.DAY_OF_MONTH, 37);
-                return dateFormat.format(calendar.getTime());
+                return RecordStoreController.dateFormat.format(calendar.getTime());
 
             case 2:
                 calendar.add(Calendar.YEAR, 1);
-                return dateFormat.format(calendar.getTime());
+                return RecordStoreController.dateFormat.format(calendar.getTime());
 
             default:
                 return "";

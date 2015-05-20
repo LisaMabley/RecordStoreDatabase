@@ -2,6 +2,7 @@ package com.Lisa;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +20,7 @@ public class AccountsGUI extends JPanel {
     private JButton editSelectedConsignorButton;
     private JComboBox<Consignor> consignorNamesComboBox;
     private JButton deleteSelectedConsignorButton;
-    private JTextArea addEditAndDeleteTextArea;
+    private JTextArea addEditAndDeleteTextArea; // This is NOT unused
     private JList<Payment> paymentsJList;
     private JButton returnSelectedAlbumToButton;
     private JButton payFullAmountOwedButton;
@@ -30,6 +31,7 @@ public class AccountsGUI extends JPanel {
     private static DefaultListModel<ConsignorAlbum> consignorAlbumListModel = new DefaultListModel<ConsignorAlbum>();
     private static DefaultListModel<Payment> consignorPaymentListModel = new DefaultListModel<Payment>();
 
+    protected SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
 
     // Constructor
     public AccountsGUI() {
@@ -60,8 +62,7 @@ public class AccountsGUI extends JPanel {
                     consignorPhoneTextField.setText(selectedConsignor.phoneNumber);
                     getConsignorAlbumDetails(selectedConsignor.consignorId);
                     getConsignorPaymentDetails(selectedConsignor.consignorId);
-                    // TODO format number nicely
-                    amountOwedLabel.setText("Amount owed: $" + selectedConsignor.amountOwed);
+                    amountOwedLabel.setText("Amount owed: " + RecordStoreController.currencyFormatter.format(selectedConsignor.amountOwed));
 
                 } else {
                     // No consignor selected
@@ -137,15 +138,22 @@ public class AccountsGUI extends JPanel {
             }
         });
 
-        quitProgramButton.addActionListener(new ActionListener() {
+        // TODO implement edit consignor info button functionality
+
+        payFullAmountOwedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DataModel.closeDbConnections();
-                System.exit(0);
+                Consignor consignorSelected = (Consignor) consignorNamesComboBox.getSelectedItem();
+                RecordStoreController.requestPayConsignorInFull(consignorSelected);
             }
         });
 
-        // TODO implement edit consignor info button functionality
+        quitProgramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RecordStoreController.quitProgram();
+            }
+        });
     }
 
     private void refreshConsignorList() {

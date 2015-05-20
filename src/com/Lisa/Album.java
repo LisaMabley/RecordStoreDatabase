@@ -1,8 +1,6 @@
 package com.Lisa;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by lisa on 4/21/15.
@@ -43,8 +41,6 @@ public class Album {
     protected static final int STATUS_SOLD = 3;
     protected static final int STATUS_DONATED = 4;
     protected static final int STATUS_RETURNED_TO_CONSIGNOR = 5;
-
-    protected SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
 
     Album(int consignorId, String artistName, String albumTitle, int size, int condition, float price) {
         this.consignorId = consignorId;

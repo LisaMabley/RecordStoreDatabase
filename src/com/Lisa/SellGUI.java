@@ -102,8 +102,7 @@ public class SellGUI extends JPanel {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DataModel.closeDbConnections();
-                System.exit(0);
+                RecordStoreController.quitProgram();
             }
         });
     }

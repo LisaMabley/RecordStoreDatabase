@@ -2,11 +2,11 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.Lisa.ConsignorsGUI">
   <grid id="27dc6" binding="consignorsPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="700" height="550"/>
+      <xy x="20" y="20" width="700" height="650"/>
     </constraints>
     <properties>
-      <maximumSize width="650" height="550"/>
-      <minimumSize width="650" height="550"/>
+      <maximumSize width="650" height="650"/>
+      <minimumSize width="650" height="650"/>
       <preferredSize width="650" height="650"/>
     </properties>
     <border type="none"/>

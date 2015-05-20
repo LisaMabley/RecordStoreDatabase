@@ -1,11 +1,15 @@
 package com.Lisa;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.text.NumberFormat;
 
 public class RecordStoreController {
 
+    static SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
+    static NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
     static DataModel model ;
 
     public static void main(String[] args) {
@@ -91,5 +95,10 @@ public class RecordStoreController {
     public static void requestPayConsignorInFull(Consignor consignorToPay) {
         Payment newPayment = new Payment(consignorToPay.consignorId, consignorToPay.amountOwed);
         DataModel.recordPayment(newPayment);
+    }
+
+    public static void quitProgram() {
+        DataModel.closeDbConnections();
+        System.exit(0);
     }
 }

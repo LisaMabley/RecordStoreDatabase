@@ -46,7 +46,7 @@ public class Consignor {
 
     public String getConsignorPaymentDetails() {
         StringBuilder stringBuilder = new StringBuilder();
-        String amountOwed = "Owed: $" + this.amountOwed + "\n\n";
+        String amountOwed = "Owed: " + RecordStoreController.currencyFormatter.format(this.amountOwed) + "\n\n";
         stringBuilder.append(amountOwed);
         String email = "Email address: " + this.email + "\n";
         stringBuilder.append(email);
